@@ -11,9 +11,16 @@
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
   var esc = function (s) {
+    if (s == null) return '';
     return String(s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
+  };
+  var safeUrl = function (u) {
+    if (!u) return '#';
+    var s = String(u).trim();
+    if (/^(javascript|data|vbscript):/i.test(s)) return '#';
+    return esc(s);
   };
   var norm = function (s) {
     var text = String(s);
@@ -579,7 +586,7 @@
             '<button class="btn btn--ghost btn--sm" type="button" data-fav="' + g.slug + '" aria-pressed="' + (isFav(g.slug) ? 'true' : 'false') + '">' +
               heartSvg + '<span data-fav-label>' + (isFav(g.slug) ? 'On your shelf' : 'Save to shelf') + '</span>' +
             '</button>' +
-            '<a class="btn btn--sm" href="' + esc(g.url) + '" data-play-link>' + playSvg + ' Play now</a>' +
+            '<a class="btn btn--sm" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">' + playSvg + ' Play now</a>' +
           '</div>' +
         '</div>' +
 
@@ -592,7 +599,7 @@
                   '<span class="eyebrow">Ready to play / external game</span>' +
                   '<h2 class="play-word">Play</h2>' +
                   '<p class="play-game-name">' + esc(g.title) + '</p>' +
-                  '<a class="play-big play-big--xl" href="' + esc(g.url) + '" data-play-link>' + playSvg + ' Play ' + esc(g.title) + '</a>' +
+                  '<a class="play-big play-big--xl" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">' + playSvg + ' Play ' + esc(g.title) + '</a>' +
                   '<span class="hint">Opens ' + esc(host) + ' in this tab Â· not hosted by ARCADE</span>' +
                 '</div>' +
               '</div>' +
@@ -626,7 +633,7 @@
             '<div class="info-card external-card">' +
               '<h3>Off-site note</h3>' +
               '<p>' + esc(g.title) + ' is not hosted by ARCADE. The Play button opens its external host, where that siteâ€™s own terms and privacy policy apply.</p>' +
-              '<a class="text-link" href="' + esc(g.url) + '" data-play-link>Play now ' + arrowSvg + '</a>' +
+              '<a class="text-link" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">Play now ' + arrowSvg + '</a>' +
             '</div>' +
           '</aside>' +
         '</div>' +
@@ -650,7 +657,7 @@
             '<div class="prose-block">' +
               '<h2>The exact link</h2>' +
               '<p>No redirect chain on our side. This is the URL attached to ' + esc(g.title) + ' in the catalogue:</p>' +
-              '<a class="url-box" href="' + esc(g.url) + '" data-play-link title="Open ' + esc(g.title) + '">' +
+              '<a class="url-box" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer" title="Open ' + esc(g.title) + '">' +
                 '<span>Play link / ' + number + '</span>' +
                 '<code>' + esc(g.url) + '</code>' +
               '</a>' +

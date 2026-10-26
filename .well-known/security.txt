@@ -1,0 +1,5 @@
+Contact: mailto:hello@arcade.run.place
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://arcade.run.place/.well-known/security.txt
+Policy: https://arcade.run.place/info.html?p=privacy

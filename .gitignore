@@ -5,11 +5,35 @@ Desktop.ini
 $RECYCLE.BIN/
 .DS_Store
 
-# Editor directories
+# Secrets & Environment Variables (Prevent accidental leaks)
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+id_rsa
+id_ed25519
+
+# Editor directories & local configurations
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*~
+
+# Dependencies & Build artifacts (if ever added)
+node_modules/
+dist/
+build/
 
 # Archive directory (local backups)
 _archive/
