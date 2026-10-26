@@ -11,12 +11,52 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://arcade.run.place/collection.html?c=open</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arcade.run.place/collection.html?c=versus</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arcade.run.place/collection.html?c=shooters</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arcade.run.place/collection.html?c=sports</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://arcade.run.place/collection.html?c=vault</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://arcade.run.place/classic.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://arcade.run.place/info.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://arcade.run.place/info.html?p=copyright</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://arcade.run.place/info.html?p=privacy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://arcade.run.place/info.html?p=terms</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
