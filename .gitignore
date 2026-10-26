@@ -35,5 +35,10 @@ node_modules/
 dist/
 build/
 
-# Archive directory (local backups)
+# Archive and backup directories
 _archive/
+_backup/
+backups/
+*.zip
+*.bundle
+*.tar.gz
