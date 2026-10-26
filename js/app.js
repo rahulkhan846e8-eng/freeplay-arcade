@@ -111,7 +111,9 @@
         '</div>' +
         '<div class="card-meta">' +
           '<span class="genre">' + esc(g.genre) + '</span>' +
-          '<span class="card-play-hint" title="' + esc(g.url) + '">Play link ↗</span>' +
+          '<span class="card-play-hint" title="' + esc((g.servers && g.servers.length > 1) ? (g.servers.length + ' servers available') : g.url) + '">' +
+            ((g.servers && g.servers.length > 1) ? (g.servers.length + ' Servers ↗') : 'Play link ↗') +
+          '</span>' +
         '</div>' +
       '</div>' +
     '</article>';
@@ -586,7 +588,13 @@
             '<button class="btn btn--ghost btn--sm" type="button" data-fav="' + g.slug + '" aria-pressed="' + (isFav(g.slug) ? 'true' : 'false') + '">' +
               heartSvg + '<span data-fav-label>' + (isFav(g.slug) ? 'On your shelf' : 'Save to shelf') + '</span>' +
             '</button>' +
-            '<a class="btn btn--sm" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">' + playSvg + ' Play now</a>' +
+            (hasServers
+              ? g.servers.map(function (s, idx) {
+                  var sName = s.name || ('Server ' + (idx + 1));
+                  var cls = idx === 0 ? 'btn btn--sm' : 'btn btn--ghost btn--sm';
+                  return '<a class="' + cls + '" href="' + safeUrl(s.url) + '" data-play-link rel="noopener noreferrer">' + playSvg + ' ' + esc(sName) + '</a>';
+                }).join(' ')
+              : '<a class="btn btn--sm" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">' + playSvg + ' Play now</a>') +
           '</div>' +
         '</div>' +
 
@@ -596,11 +604,26 @@
               '<div class="stage stage--play">' +
                 '<div class="idle-cover">' + C.coverHTML(g) + '</div>' +
                 '<div class="stage-overlay stage-overlay--play">' +
-                  '<span class="eyebrow">Ready to play / external game</span>' +
-                  '<h2 class="play-word">Play</h2>' +
-                  '<p class="play-game-name">' + esc(g.title) + '</p>' +
-                  '<a class="play-big play-big--xl" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">' + playSvg + ' Play ' + esc(g.title) + '</a>' +
-                  '<span class="hint">Opens ' + esc(host) + ' in this tab · not hosted by ARCADE</span>' +
+                  (hasServers
+                    ? '<span class="eyebrow">Select a server to play / external game</span>' +
+                      '<h2 class="play-word">Servers</h2>' +
+                      '<p class="play-game-name">' + esc(g.title) + '</p>' +
+                      '<div class="server-btn-grid" style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:16px;max-width:540px;">' +
+                        g.servers.map(function (s, idx) {
+                          var sName = s.name || ('Server ' + (idx + 1));
+                          var sHost = hostOf(s.url);
+                          var bgStyle = idx === 1 ? 'background:#ffffff;' : (idx > 1 ? 'background:var(--paper);' : '');
+                          return '<a class="play-big play-big--xl server-btn" href="' + safeUrl(s.url) + '" data-play-link rel="noopener noreferrer" style="min-width:180px;justify-content:center;' + bgStyle + '">' +
+                            playSvg + ' ' + esc(sName) + ' <span style="font-size:10px;opacity:0.75;font-family:var(--font-mono);margin-left:6px;font-weight:600;">(' + esc(sHost) + ')</span>' +
+                          '</a>';
+                        }).join('') +
+                      '</div>' +
+                      '<span class="hint" style="margin-top:12px;">' + g.servers.length + ' mirror servers available · opens in this tab · not hosted by ARCADE</span>'
+                    : '<span class="eyebrow">Ready to play / external game</span>' +
+                      '<h2 class="play-word">Play</h2>' +
+                      '<p class="play-game-name">' + esc(g.title) + '</p>' +
+                      '<a class="play-big play-big--xl" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">' + playSvg + ' Play ' + esc(g.title) + '</a>' +
+                      '<span class="hint">Opens ' + esc(host) + ' in this tab · not hosted by ARCADE</span>') +
                 '</div>' +
               '</div>' +
               '<div class="stage-foot">' +
@@ -614,7 +637,7 @@
             '</div>' +
             '<div class="play-notice">' +
               '<span class="play-notice-mark" aria-hidden="true">!</span>' +
-              '<p><strong>You are leaving CABINET.</strong> Play opens <b>' + esc(host) + '</b> in this tab. The game, its downloads, ads and account prompts are controlled by that site, not by us. The back button brings you straight back here.</p>' +
+              '<p><strong>You are leaving ARCADE.</strong> Play opens <b>' + esc(host) + '</b> in this tab. The game, its downloads, ads and account prompts are controlled by that site, not by us. The back button brings you straight back here.</p>' +
             '</div>' +
           '</div>' +
 
@@ -632,8 +655,15 @@
             '</div>' +
             '<div class="info-card external-card">' +
               '<h3>Off-site note</h3>' +
-              '<p>' + esc(g.title) + ' is not hosted by ARCADE. The Play button opens its external host, where that site’s own terms and privacy policy apply.</p>' +
-              '<a class="text-link" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">Play now ' + arrowSvg + '</a>' +
+              '<p>' + esc(g.title) + ' is not hosted by ARCADE. Play buttons open external hosts, where that site’s own terms and privacy policy apply.</p>' +
+              (hasServers
+                ? '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">' +
+                    g.servers.map(function (s, idx) {
+                      var sName = s.name || ('Server ' + (idx + 1));
+                      return '<a class="text-link" href="' + safeUrl(s.url) + '" data-play-link rel="noopener noreferrer">' + esc(sName) + ' ' + arrowSvg + '</a>';
+                    }).join('') +
+                  '</div>'
+                : '<a class="text-link" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">Play now ' + arrowSvg + '</a>') +
             '</div>' +
           '</aside>' +
         '</div>' +
@@ -651,17 +681,29 @@
                 '<li>The Play button opens an external website in this tab. Use your browser’s back button to return to this cabinet.</li>' +
                 '<li>Third-party hosts may show ads or pop-ups, ask you to create an account, or limit access by region.</li>' +
                 '<li>Any download, purchase or account you agree to there is between you and that site. Check its terms before you continue.</li>' +
-                '<li>CABINET has no control over the game’s availability. If the link is dead, tell us and we will review it.</li>' +
+                '<li>ARCADE has no control over the game’s availability. If the link is dead, tell us and we will review it.</li>' +
               '</ul>' +
             '</div>' +
-            '<div class="prose-block">' +
-              '<h2>The exact link</h2>' +
-              '<p>No redirect chain on our side. This is the URL attached to ' + esc(g.title) + ' in the catalogue:</p>' +
-              '<a class="url-box" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer" title="Open ' + esc(g.title) + '">' +
-                '<span>Play link / ' + number + '</span>' +
-                '<code>' + esc(g.url) + '</code>' +
-              '</a>' +
-            '</div>' +
+            (hasServers
+              ? '<div class="prose-block">' +
+                  '<h2>Available Servers</h2>' +
+                  '<p>No redirect chains on our side. Choose any mirror server below to launch ' + esc(g.title) + ':</p>' +
+                  g.servers.map(function (s, idx) {
+                    var sName = s.name || ('Server ' + (idx + 1));
+                    return '<a class="url-box" href="' + safeUrl(s.url) + '" data-play-link rel="noopener noreferrer" title="Open ' + esc(sName) + '" style="margin-bottom:12px;">' +
+                      '<span>' + esc(sName) + ' / ' + number + '</span>' +
+                      '<code>' + esc(s.url) + '</code>' +
+                    '</a>';
+                  }).join('') +
+                '</div>'
+              : '<div class="prose-block">' +
+                  '<h2>The exact link</h2>' +
+                  '<p>No redirect chain on our side. This is the URL attached to ' + esc(g.title) + ' in the catalogue:</p>' +
+                  '<a class="url-box" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer" title="Open ' + esc(g.title) + '">' +
+                    '<span>Play link / ' + number + '</span>' +
+                    '<code>' + esc(g.url) + '</code>' +
+                  '</a>' +
+                '</div>') +
           '</div>' +
           '<aside class="info-panel" style="position:static">' +
             '<div class="info-card">' +

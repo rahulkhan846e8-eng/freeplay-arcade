@@ -61,7 +61,11 @@
     "sourceTitle": "GTA V",
     "collection": "open",
     "genre": "Open world",
-    "url": "https://web.archive.org/web/20261006055917/https://playgta5.com/",
+    "url": "https://v2.fiveplay.lol/launcher.html",
+    "servers": [
+      { "name": "Server 1", "url": "https://v2.fiveplay.lol/launcher.html" },
+      { "name": "Server 2", "url": "https://fiveplay.lol/" }
+    ],
     "featured": true,
     "motif": "grid",
     "bg": "#0c0c12",
