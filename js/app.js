@@ -575,7 +575,7 @@
     var hasServers = Array.isArray(g.servers) && g.servers.length > 1;
     document.title = g.title + ' — Play — ARCADE';
     var meta = $('meta[name="description"]');
-    if (meta) meta.setAttribute('content', 'Play ' + g.title + ', a ' + g.genre + ' game in the ' + c.name + ' collection. Play opens ' + host + ' in this tab. ARCADE does not host the game.');
+    if (meta) meta.setAttribute('content', 'Play ' + g.title + ', a ' + g.genre + ' game in the ' + c.name + ' collection. Play opens ' + host + ' in a new tab. ARCADE does not host the game.');
 
     var related = D.games.filter(function (x) { return x.collection === g.collection && x.slug !== g.slug; });
     if (related.length < 3) {
@@ -602,9 +602,9 @@
               ? g.servers.map(function (s, idx) {
                   var sName = s.name || ('Server ' + (idx + 1));
                   var cls = idx === 0 ? 'btn btn--sm' : 'btn btn--ghost btn--sm';
-                  return '<a class="' + cls + '" href="' + safeUrl(s.url) + '" data-play-link rel="noopener noreferrer">' + playSvg + ' ' + esc(sName) + '</a>';
+                  return '<a class="' + cls + '" href="' + safeUrl(s.url) + '" target="_blank" data-play-link rel="noopener noreferrer">' + playSvg + ' ' + esc(sName) + '</a>';
                 }).join(' ')
-              : '<a class="btn btn--sm" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">' + playSvg + ' Play now</a>') +
+              : '<a class="btn btn--sm" href="' + safeUrl(g.url) + '" target="_blank" data-play-link rel="noopener noreferrer">' + playSvg + ' Play now</a>') +
           '</div>' +
         '</div>' +
 
@@ -623,31 +623,31 @@
                           var sName = s.name || ('Server ' + (idx + 1));
                           var sHost = hostOf(s.url);
                           var bgStyle = idx === 1 ? 'background:#ffffff;' : (idx > 1 ? 'background:var(--paper);' : '');
-                          return '<a class="play-big play-big--xl server-btn" href="' + safeUrl(s.url) + '" data-play-link rel="noopener noreferrer" style="min-width:160px;justify-content:center;' + bgStyle + '">' +
+                          return '<a class="play-big play-big--xl server-btn" href="' + safeUrl(s.url) + '" target="_blank" data-play-link rel="noopener noreferrer" style="min-width:160px;justify-content:center;' + bgStyle + '">' +
                             playSvg + ' ' + esc(sName) +
                           '</a>';
                         }).join('') +
                       '</div>' +
-                      '<span class="hint" style="margin-top:12px;">' + g.servers.length + ' mirror servers available · opens in this tab · not hosted by ARCADE</span>'
+                      '<span class="hint" style="margin-top:12px;">' + g.servers.length + ' mirror servers available · opens in a new tab · not hosted by ARCADE</span>'
                     : '<span class="eyebrow">Ready to play / external game</span>' +
                       '<h2 class="play-word">Play</h2>' +
                       '<p class="play-game-name">' + esc(g.title) + '</p>' +
-                      '<a class="play-big play-big--xl" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">' + playSvg + ' Play ' + esc(g.title) + '</a>' +
-                      '<span class="hint">Opens ' + esc(host) + ' in this tab · not hosted by ARCADE</span>') +
+                      '<a class="play-big play-big--xl" href="' + safeUrl(g.url) + '" target="_blank" data-play-link rel="noopener noreferrer">' + playSvg + ' Play ' + esc(g.title) + '</a>' +
+                      '<span class="hint">Opens ' + esc(host) + ' in a new tab · not hosted by ARCADE</span>') +
                 '</div>' +
               '</div>' +
               '<div class="stage-foot">' +
                 '<div class="controls-hint">' +
                   '<span class="ctrl">External link</span>' +
-                  '<span class="ctrl">Same tab</span>' +
-                  '<span class="ctrl">Back button returns here</span>' +
+                  '<span class="ctrl">New tab</span>' +
+                  '<span class="ctrl">ARCADE stays open</span>' +
                 '</div>' +
                 '<span class="pwr">LINK <b>' + number + '</b> / ' + total + '</span>' +
               '</div>' +
             '</div>' +
             '<div class="play-notice">' +
               '<span class="play-notice-mark" aria-hidden="true">!</span>' +
-              '<p><strong>You are leaving ARCADE.</strong> Play opens <b>' + esc(host) + '</b> in this tab. The game, its downloads, ads and account prompts are controlled by that site, not by us. The back button brings you straight back here.</p>' +
+              '<p><strong>You are leaving ARCADE.</strong> Play opens <b>' + esc(host) + '</b> in a new tab. The game, its downloads, ads and account prompts are controlled by that site, not by us. Your ARCADE tab stays open right here.</p>' +
             '</div>' +
           '</div>' +
 
@@ -670,10 +670,10 @@
                 ? '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">' +
                     g.servers.map(function (s, idx) {
                       var sName = s.name || ('Server ' + (idx + 1));
-                      return '<a class="text-link" href="' + safeUrl(s.url) + '" data-play-link rel="noopener noreferrer">' + esc(sName) + ' ' + arrowSvg + '</a>';
+                      return '<a class="text-link" href="' + safeUrl(s.url) + '" target="_blank" data-play-link rel="noopener noreferrer">' + esc(sName) + ' ' + arrowSvg + '</a>';
                     }).join('') +
                   '</div>'
-                : '<a class="text-link" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer">Play now ' + arrowSvg + '</a>') +
+                : '<a class="text-link" href="' + safeUrl(g.url) + '" target="_blank" data-play-link rel="noopener noreferrer">Play now ' + arrowSvg + '</a>') +
             '</div>' +
           '</aside>' +
         '</div>' +
@@ -683,12 +683,12 @@
             '<div class="prose-block">' +
               '<h2>About this cabinet</h2>' +
               '<p><strong>' + esc(g.title) + '</strong> is filed in the <strong>' + esc(c.name) + '</strong> collection under <strong>' + esc(g.genre) + '</strong>. It is one of ' + total + ' games on the ARCADE floor, and its page exists for one job: to get you to the right external play link without sending you through the wrong door.</p>' +
-              '<p>Press Play and this tab goes directly to <strong>' + esc(host) + '</strong>. ARCADE does not wrap the game in a player, host a copy or claim the game as its own. The game, its controls and any downloads live on the external site.</p>' +
+              '<p>Press Play and the game opens directly on <strong>' + esc(host) + '</strong> in a new tab. ARCADE does not wrap the game in a player, host a copy or claim the game as its own. The game, its controls and any downloads live on the external site.</p>' +
             '</div>' +
             '<div class="prose-block">' +
               '<h2>Before you press Play</h2>' +
               '<ul class="plain-list">' +
-                '<li>The Play button opens an external website in this tab. Use your browser’s back button to return to this cabinet.</li>' +
+                '<li>The Play button opens an external website in a new tab, keeping ARCADE open in your browser.</li>' +
                 '<li>Third-party hosts may show ads or pop-ups, ask you to create an account, or limit access by region.</li>' +
                 '<li>Any download, purchase or account you agree to there is between you and that site. Check its terms before you continue.</li>' +
                 '<li>ARCADE has no control over the game’s availability. If the link is dead, tell us and we will review it.</li>' +
@@ -700,7 +700,7 @@
                   '<p>No redirect chains on our side. Choose any mirror server below to launch ' + esc(g.title) + ':</p>' +
                   g.servers.map(function (s, idx) {
                     var sName = s.name || ('Server ' + (idx + 1));
-                    return '<a class="url-box" href="' + safeUrl(s.url) + '" data-play-link rel="noopener noreferrer" title="Open ' + esc(sName) + '" style="margin-bottom:12px;">' +
+                    return '<a class="url-box" href="' + safeUrl(s.url) + '" target="_blank" data-play-link rel="noopener noreferrer" title="Open ' + esc(sName) + '" style="margin-bottom:12px;">' +
                       '<span>' + esc(sName) + ' / ' + number + '</span>' +
                       '<code>' + esc(s.url) + '</code>' +
                     '</a>';
@@ -709,7 +709,7 @@
               : '<div class="prose-block">' +
                   '<h2>The exact link</h2>' +
                   '<p>No redirect chain on our side. This is the URL attached to ' + esc(g.title) + ' in the catalogue:</p>' +
-                  '<a class="url-box" href="' + safeUrl(g.url) + '" data-play-link rel="noopener noreferrer" title="Open ' + esc(g.title) + '">' +
+                  '<a class="url-box" href="' + safeUrl(g.url) + '" target="_blank" data-play-link rel="noopener noreferrer" title="Open ' + esc(g.title) + '">' +
                     '<span>Play link / ' + number + '</span>' +
                     '<code>' + esc(g.url) + '</code>' +
                   '</a>' +
@@ -721,7 +721,7 @@
               '<ol class="step-list">' +
                 '<li><b>01</b><span>Open a game cabinet from the floor, a collection, search or your shelf.</span></li>' +
                 '<li><b>02</b><span>Read the game info and check the external host.</span></li>' +
-                '<li><b>03</b><span>Press Play. The external game loads in this tab.</span></li>' +
+                '<li><b>03</b><span>Press Play. The external game loads in a new tab.</span></li>' +
               '</ol>' +
             '</div>' +
             '<div class="info-card">' +
@@ -760,7 +760,7 @@
       title: '48 games. <em>One click</em> <span class="nowrap">from play.</span>',
       body:
         '<p>ARCADE is a browser arcade index: 48 games, five collections and one job — get you from the shelf to the game with as little friction as possible.</p>' +
-        '<p>Every cabinet has its own page. That page tells you what you are looking at, names the external host, and gives you a big Play button. Press it and you go directly to the matching game on its own play page, in this tab. No install, no account, no emulator setup on our side.</p>' +
+        '<p>Every cabinet has its own page. That page tells you what you are looking at, names the external host, and gives you a big Play button. Press it and you go directly to the matching game on its own play page, in a new tab. No install, no account, no emulator setup on our side.</p>' +
         '<h2>How the floor is organised</h2>' +
         '<ul>' +
         '<li><strong>Open Worlds</strong> — big maps, long roads and room to wander.</li>' +
@@ -857,7 +857,7 @@
         '</ul>' +
         '<p>None of this is transmitted anywhere. Clearing site data in your browser removes all of it.</p>' +
         '<h2>When you press Play</h2>' +
-        '<p>Play opens a third-party game site in this tab. That site may set cookies, use analytics, show advertising, request an account or collect other data under its own privacy policy. ARCADE does not receive or control that data. Please review the privacy policy of the site you land on before sharing information with it.</p>' +
+        '<p>Play opens a third-party game site in a new tab. That site may set cookies, use analytics, show advertising, request an account or collect other data under its own privacy policy. ARCADE does not receive or control that data. Please review the privacy policy of the site you land on before sharing information with it.</p>' +
         '<h2>Fonts</h2>' +
         '<p>Fonts are loaded from Google Fonts, which means Google receives the request for the font files, including your IP address. If you prefer, block third-party fonts — the site falls back to local system fonts and still works.</p>' +
         '<h2>Cookies</h2>' +
@@ -872,7 +872,7 @@
         '<p>ARCADE is a free index of external game links. We do not host the games. The site is provided “as is”; links can change, break, be geo-blocked or be removed without notice.</p>' +
         '<h2>External sites</h2>' +
         '<ul>' +
-        '<li>Play buttons open third-party websites in the same tab. Their terms, privacy policies and end-user licence agreements apply to you.</li>' +
+        '<li>Play buttons open third-party websites in a new tab. Their terms, privacy policies and end-user licence agreements apply to you.</li>' +
         '<li>You are responsible for any download, purchase, account or other agreement you enter into on an external site.</li>' +
         '<li>We are not responsible for third-party content, availability, advertising, malware, account issues or losses arising from your use of an external site.</li>' +
         '<li>A link does not mean we endorse the host, the game or anything else on that site.</li>' +
