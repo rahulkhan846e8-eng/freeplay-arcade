@@ -54,4 +54,4 @@ This repository is optimized for GitHub Pages:
 ## License & Credits
 
 - All original game names, trademarks, and playable content belong to their respective copyright holders.
-- CABINET is an independent, non-commercial game index and browser project.
+- ARCADE is an independent, non-commercial game index and browser project.
