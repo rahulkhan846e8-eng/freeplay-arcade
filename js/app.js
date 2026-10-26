@@ -335,7 +335,7 @@
 
   /* ---------- home ---------- */
   function renderHome() {
-    var heroGames = ['gta-v', 'tekken-5-dark-resurrection'];
+    var heroGames = ['gta-v', 'tekken-5-dark-resurrection', 'cyberpunk-2077'];
     heroGames.forEach(function (slug) {
       var holder = $('[data-hero-poster="' + slug + '"]');
       var g = D.game(slug);
@@ -345,7 +345,16 @@
     if (systems) systems.innerHTML = D.collections.map(systemCardHTML).join('');
     var featured = $('#featured');
     if (featured) {
-      featured.innerHTML = D.games.filter(function (g) { return g.featured; }).map(function (g, i) {
+      var featSlugs = [
+        'cyberpunk-2077',
+        'gta-v',
+        'counter-strike-16',
+        'wwe-smackdown-here-comes-the-pain',
+        'need-for-speed-most-wanted',
+        'hollow-knight'
+      ];
+      var featGames = featSlugs.map(function (slug) { return D.game(slug); }).filter(Boolean);
+      featured.innerHTML = featGames.map(function (g, i) {
         return cardHTML(g, i);
       }).join('');
     }
@@ -614,8 +623,8 @@
                           var sName = s.name || ('Server ' + (idx + 1));
                           var sHost = hostOf(s.url);
                           var bgStyle = idx === 1 ? 'background:#ffffff;' : (idx > 1 ? 'background:var(--paper);' : '');
-                          return '<a class="play-big play-big--xl server-btn" href="' + safeUrl(s.url) + '" data-play-link rel="noopener noreferrer" style="min-width:180px;justify-content:center;' + bgStyle + '">' +
-                            playSvg + ' ' + esc(sName) + ' <span style="font-size:10px;opacity:0.75;font-family:var(--font-mono);margin-left:6px;font-weight:600;">(' + esc(sHost) + ')</span>' +
+                          return '<a class="play-big play-big--xl server-btn" href="' + safeUrl(s.url) + '" data-play-link rel="noopener noreferrer" style="min-width:160px;justify-content:center;' + bgStyle + '">' +
+                            playSvg + ' ' + esc(sName) +
                           '</a>';
                         }).join('') +
                       '</div>' +

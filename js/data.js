@@ -654,7 +654,7 @@
     "collection": "open",
     "genre": "Sandbox",
     "url": "https://wasmarcade.com/minecraft",
-    "featured": true,
+    "featured": false,
     "motif": "rays",
     "bg": "#0c0c12",
     "accent": "#2c4bff",

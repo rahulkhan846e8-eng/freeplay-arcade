@@ -419,6 +419,7 @@ em { font-style: normal; }
 }
 .hero-card--one { left: -8px; bottom: -18px; transform: rotate(-6deg); }
 .hero-card--two { left: 148px; bottom: 34px; width: 146px; height: 192px; transform: rotate(4deg); z-index: 4; }
+.hero-card--three { left: 282px; bottom: -8px; width: 140px; height: 184px; transform: rotate(-3deg); z-index: 5; }
 .mini-mono {
   font-family: var(--font-mono); font-size: 7px; font-weight: 700;
   letter-spacing: 0.1em; text-transform: uppercase;
@@ -619,10 +620,14 @@ em { font-style: normal; }
    ========================================================================== */
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 26px;
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  gap: 20px;
 }
-.game-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.game-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 300px));
+  justify-content: center;
+  gap: 22px;
+}
 
 .game-card {
   height: 100%;
@@ -636,7 +641,8 @@ em { font-style: normal; }
 
 .cover {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 4.8;
+  max-height: 330px;
   overflow: hidden;
   background: var(--ink);
   border-bottom: 3px solid var(--ink);
@@ -702,8 +708,8 @@ em { font-style: normal; }
   text-shadow: 1px 1px 0 rgba(0,0,0,0.7);
 }
 .cover-title {
-  font-family: var(--font-display); font-size: clamp(25px, 2.2vw, 33px);
-  line-height: 0.87; text-transform: uppercase;
+  font-family: var(--font-display); font-size: clamp(20px, 1.8vw, 26px);
+  line-height: 0.88; text-transform: uppercase;
   color: var(--paper);
   text-shadow: 2px 2px 0 rgba(0,0,0,0.45);
   overflow-wrap: break-word;
@@ -1225,27 +1231,27 @@ em { font-style: normal; }
 .play-big:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
 
 /* external play panel */
-.stage--play { aspect-ratio: 16 / 10; background: var(--ink); }
+.stage--play { aspect-ratio: 16 / 9; max-height: 420px; background: var(--ink); }
 .stage-overlay--play { background: rgba(7, 7, 7, 0.72); backdrop-filter: blur(3px); }
 .stage-overlay--play .eyebrow { color: var(--acid); }
 .stage-overlay--play .play-word {
-  margin: 2px 0 8px;
-  font-size: clamp(86px, 13vw, 188px);
-  line-height: 0.78;
+  margin: 0 0 6px;
+  font-size: clamp(48px, 7vw, 92px);
+  line-height: 0.82;
   color: var(--acid);
-  text-shadow: 7px 7px 0 rgba(0, 0, 0, 0.62);
+  text-shadow: 5px 5px 0 rgba(0, 0, 0, 0.62);
 }
 .stage-overlay--play .play-game-name {
   display: block;
   max-width: 34ch;
   font-family: var(--font-display);
-  font-size: clamp(18px, 2.1vw, 29px);
+  font-size: clamp(16px, 1.8vw, 24px);
   line-height: 0.94;
   text-transform: uppercase;
   color: var(--paper);
 }
-.play-big--xl { margin-top: 18px; padding: 15px 26px; font-size: 12px; }
-.play-big--xl svg { width: 16px; height: 16px; }
+.play-big--xl { margin-top: 14px; padding: 12px 24px; font-size: 11px; }
+.play-big--xl svg { width: 14px; height: 14px; }
 .stage-overlay--play .hint { max-width: 46ch; color: #bdb7a8; }
 
 .play-notice {
@@ -1717,6 +1723,7 @@ kbd {
   .hero-grid { gap: 30px; grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr); }
   .hero-card { width: 146px; height: 192px; }
   .hero-card--two { left: 124px; width: 132px; height: 174px; }
+  .hero-card--three { left: 238px; width: 126px; height: 166px; }
   .shelf { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .shelf-intro { grid-column: span 1; }
 }
@@ -1807,7 +1814,8 @@ kbd {
   .hero-art { min-height: 350px; width: 100%; }
   .hero-photo { width: 92%; }
   .hero-card { width: 116px; height: 152px; }
-  .hero-card--two { display: none; }
+  .hero-card--two,
+  .hero-card--three { display: none; }
   .hero-card--one { left: -2px; bottom: -14px; }
   .hero-sticker { width: 82px; height: 82px; top: -20px; right: -3px; }
   .hero-sticker b { font-size: 30px; }
