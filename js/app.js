@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    CABINET â€” site application
    ========================================================================== */
 (function () {
@@ -447,12 +447,12 @@
       lede = c.long;
       crumb = '<a href="index.html">Home</a> / ' + esc(c.name);
     } else {
-      title = 'The whole <em>floor.</em>'; eyebrow = 'All collections'; color = 'var(--acid)'; inkColor = '#0b0b0b';
-      lede = 'Every game in the building, in one place. Filter by genre, open a cabinet, then press Play to jump to its external link.';
-      crumb = '<a href="index.html">Home</a> / All games';
+      title = 'Explore <em>All Games.</em>'; eyebrow = 'All 47 Games Available'; color = 'var(--acid)'; inkColor = '#0b0b0b';
+      lede = 'Every game available on FREE PLAY, all in one place. Filter by genre, search, or pick any cabinet to start playing.';
+      crumb = '<a href="index.html">Home</a> / Explore All';
     }
 
-    document.title = (state.mode === 'fav' ? 'My shelf' : state.query ? 'Search' : c ? c.name : 'All games') + ' â€” CABINET';
+    document.title = (state.mode === 'fav' ? 'My shelf' : state.query ? 'Search' : c ? c.name : 'Explore All Games') + ' — FREE PLAY';
     $('meta[name="description"]').setAttribute('content', (c ? c.long : lede).slice(0, 155));
 
     root.innerHTML =
@@ -533,6 +533,9 @@
     if (c) {
       var link = $('.main-nav [data-nav="' + c.id + '"]');
       if (link) link.classList.add('active');
+    } else if (!state.query && state.mode !== 'fav') {
+      var allLink = $('.main-nav [data-nav="all"]');
+      if (allLink) allLink.classList.add('active');
     }
   }
 
