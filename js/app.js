@@ -563,6 +563,7 @@
     var host = hostOf(g.url);
     var total = D.games.length;
     var number = String(g.index).padStart(2, '0');
+    var hasServers = Array.isArray(g.servers) && g.servers.length > 1;
     document.title = g.title + ' — Play — ARCADE';
     var meta = $('meta[name="description"]');
     if (meta) meta.setAttribute('content', 'Play ' + g.title + ', a ' + g.genre + ' game in the ' + c.name + ' collection. Play opens ' + host + ' in this tab. ARCADE does not host the game.');
@@ -760,7 +761,7 @@
         '<li><strong>The Vault</strong> — horror, rhythm, puzzle, RPG and browser curiosities that fit nowhere else.</li>' +
         '</ul>' +
         '<h2>What ARCADE is — and is not</h2>' +
-        '<p>ARCADE does not host game files, ROMs, ISOs or emulators, and does not claim ownership of any game. The catalogue links to third-party sites that provide the playable versions. Game names, logos and trademarks belong to their respective owners. CABINET is independent and is not affiliated with, endorsed by or sponsored by any publisher, platform holder, storefront or external host.</p>' +
+        '<p>ARCADE does not host game files, ROMs, ISOs or emulators, and does not claim ownership of any game. The catalogue links to third-party sites that provide the playable versions. Game names, logos and trademarks belong to their respective owners. ARCADE is independent and is not affiliated with, endorsed by or sponsored by any publisher, platform holder, storefront or external host.</p>' +
         '<h2>What we made</h2>' +
         '<p>The site design, front-end code and every typographic poster are original to ARCADE. The posters are generated as SVG from each game’s catalogue number, collection palette and a geometric motif; they do not reproduce box art, screenshots or publisher imagery. The single real photograph — the Tokyo arcade on the homepage — is openly licensed and credited in full on the <a href="info.html?p=copyright">copyright page</a>.</p>' +
         '<h2>How it is built</h2>' +
@@ -821,7 +822,7 @@
         '</ul>' +
         '<p class="credit-note">The CC BY-SA 2.0 image remains under the same licence as the original. The cropped version used here is shared under CC BY-SA 2.0. Attribution does not imply endorsement by the photographer.</p>' +
         '<h2>External links and third-party material</h2>' +
-        '<p>Play buttons navigate to websites we do not own or operate. Those sites are responsible for their own content, game files, advertising and compliance. CABINET has no ability to remove material from them. If a linked site infringes your rights, contact that host as well as notifying us so the listing can be reviewed.</p>' +
+        '<p>Play buttons navigate to websites we do not own or operate. Those sites are responsible for their own content, game files, advertising and compliance. ARCADE has no ability to remove material from them. If a linked site infringes your rights, contact that host as well as notifying us so the listing can be reviewed.</p>' +
         '<h2>Reporting a problem or takedown request</h2>' +
         '<p>If you are a rights holder and believe a link or any material on ARCADE infringes your rights, email <a href="mailto:hello@arcade.run.place">hello@arcade.run.place</a> with the subject “Copyright” and include:</p>' +
         '<ul>' +
