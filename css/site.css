@@ -624,9 +624,8 @@ em { font-style: normal; }
   gap: 20px;
 }
 .game-grid--3 {
-  grid-template-columns: repeat(3, minmax(0, 300px));
-  justify-content: center;
-  gap: 22px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 26px;
 }
 
 .game-card {
@@ -641,8 +640,7 @@ em { font-style: normal; }
 
 .cover {
   position: relative;
-  aspect-ratio: 4 / 4.8;
-  max-height: 330px;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--ink);
   border-bottom: 3px solid var(--ink);
@@ -708,8 +706,8 @@ em { font-style: normal; }
   text-shadow: 1px 1px 0 rgba(0,0,0,0.7);
 }
 .cover-title {
-  font-family: var(--font-display); font-size: clamp(20px, 1.8vw, 26px);
-  line-height: 0.88; text-transform: uppercase;
+  font-family: var(--font-display); font-size: clamp(25px, 2.2vw, 33px);
+  line-height: 0.87; text-transform: uppercase;
   color: var(--paper);
   text-shadow: 2px 2px 0 rgba(0,0,0,0.45);
   overflow-wrap: break-word;
