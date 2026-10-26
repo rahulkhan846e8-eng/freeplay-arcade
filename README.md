@@ -1,8 +1,8 @@
 # ARCADE — Browser Arcade
 
-> **47 browser games across five collections. One click to play.**
+> **48 browser games across five collections. One click to play.**
 
-A neo-brutalist browser arcade indexing 47 games across five curated collections. Open a cabinet, hit Play, and jump straight into the action. Features procedural typographic SVG poster covers, high score tracking, shelf bookmarking, instant search (<kbd>Ctrl</kbd> + <kbd>K</kbd>), and an integrated 6-in-1 Retro Room.
+A neo-brutalist browser arcade indexing 48 games across five curated collections. Open a cabinet, hit Play, and jump straight into the action. Features procedural typographic SVG poster covers, high score tracking, shelf bookmarking, instant search (<kbd>Ctrl</kbd> + <kbd>K</kbd>), and an integrated 6-in-1 Retro Room.
 
 ---
 
@@ -21,7 +21,7 @@ A neo-brutalist browser arcade indexing 47 games across five curated collections
 
 - **No Install / No Accounts**: Direct play links and instant in-browser retro canvas mini-games.
 - **My Shelf**: Save your favorite cabinets locally in your browser (`localStorage`).
-- **Instant Search**: Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to fuzzy-search across all 47 titles.
+- **Instant Search**: Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to fuzzy-search across all 48 titles.
 - **Responsive Neo-Brutalist Design**: Hand-crafted CSS layout optimized for desktop, tablet, and mobile.
 - **Procedural Artwork**: Dynamic SVG poster system generated entirely via code.
 

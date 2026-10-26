@@ -716,6 +716,20 @@
     "accent": "#ff4fa3",
     "accent2": "#ff4fa3",
     "index": 47
+  },
+  {
+    "slug": "cyberpunk-2077",
+    "title": "Cyberpunk 2077",
+    "sourceTitle": "Cyberpunk 2077",
+    "collection": "open",
+    "genre": "Open world RPG",
+    "url": "https://cyberpunk2077.lol/",
+    "featured": true,
+    "motif": "neon",
+    "bg": "#0c0a14",
+    "accent": "#fcee0a",
+    "accent2": "#00f0ff",
+    "index": 48
   }
 ];
 

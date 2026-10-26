@@ -1,19 +1,19 @@
 # ARCADE
 
-> Free, independent, neo-brutalist browser arcade indexing 47 games across five curated collections. Zero friction, instant play, no accounts, no installations.
+> Free, independent, neo-brutalist browser arcade indexing 48 games across five curated collections. Zero friction, instant play, no accounts, no installations.
 
 ## Overview
 ARCADE is a web-based game catalogue that indexes playable browser games. Each cabinet card links directly to its external play destination or provides a self-contained canvas mini-game. All favorites and shelves are stored in the user's browser localStorage without requiring a server or database.
 
 ## Collections
-- **01 Open Worlds**: Grand Theft Auto 2, GTA III, GTA: Vice City, GTA: San Andreas, GTA IV, GTA V, Pokémon (18 games), The Legend of Zelda, Fallout, Watch Dogs, Assassin's Creed.
+- **01 Open Worlds**: Grand Theft Auto 2, GTA III, GTA: Vice City, GTA: San Andreas, GTA IV, GTA V, Pokémon (18 games), The Legend of Zelda, Fallout, Watch Dogs, Assassin's Creed, Cyberpunk 2077.
 - **02 Versus**: Street Fighter II, Tekken 3, Mortal Kombat II, Super Smash Bros, WWE SmackDown, Def Jam Fight for NY.
 - **03 Firefight**: DOOM (1993), Half-Life, Halo: Combat Evolved, Call of Duty 2, Counter-Strike 1.6, Quake, BioShock, Left 4 Dead.
 - **04 Speed & Sport**: Need for Speed: Underground 2, Burnout 3: Takedown, Gran Turismo 2, FIFA 07, NBA 2K, Tony Hawk's Pro Skater 2, EA Sports Cricket 07.
 - **05 The Vault**: Five Nights at Freddy's, Silent Hill, Resident Evil 2, Castlevania: Symphony of the Night, Portal, Metal Gear Solid.
 
 ## Features
-- 47 playable browser games.
+- 48 playable browser games.
 - Real official game poster covers with responsive fallback to procedural typographic SVG covers.
 - Client-side fuzzy instant search (triggered with Ctrl + K).
 - Retro Room: An integrated 6-in-1 retro arcade canvas room with classic custom engines (classic.html).

@@ -194,7 +194,7 @@
     var accent2 = game.accent2 || PAPER;
     var bg = game.bg || '#0c0c12';
     var index = pad(game.index || 1);
-    var total = D && D.games ? pad(D.games.length) : '47';
+    var total = D && D.games ? pad(D.games.length) : '48';
     var collLabel = coll ? coll.label : 'ARCADE';
     var body = motif(game, accent, accent2);
 
