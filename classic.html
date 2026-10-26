@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PLAY FREE — Classic Games in Your Browser</title>
+  <meta name="description" content="6 free fan-made classic-style mini games playable instantly in your browser. No install, no account, high scores saved." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23FFD026'/><rect x='1' y='1' width='14' height='14' fill='none' stroke='%230D0D0D' stroke-width='2'/><text x='8' y='12.5' font-size='11' font-family='monospace' font-weight='bold' text-anchor='middle' fill='%230D0D0D'>P</text></svg>" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #F3EFE6;
+      --ink-black: #0D0D0D;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg-cream);
+      color: var(--ink-black);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .font-display {
+      font-family: 'Archivo Black', Impact, sans-serif;
+      letter-spacing: -0.02em;
+    }
+    .font-mono-brutal {
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    /* Brutalist hard border & offset shadow */
+    .brutal-box {
+      border: 4px solid #0D0D0D;
+      box-shadow: 6px 6px 0px #0D0D0D;
+      transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.12s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .brutal-box-sm {
+      border: 3px solid #0D0D0D;
+      box-shadow: 4px 4px 0px #0D0D0D;
+      transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.12s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .brutal-card:hover, .brutal-card:focus-visible {
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0px #0D0D0D;
+      outline: none;
+    }
+    .brutal-card:active {
+      transform: translate(3px, 3px);
+      box-shadow: 3px 3px 0px #0D0D0D;
+    }
+    .brutal-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px #0D0D0D; }
+    .brutal-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #0D0D0D; }
+    .brutal-btn:focus-visible { outline: 3px dashed #FFD026; outline-offset: 3px; }
+    /* Halftone dot pattern overlay */
+    .halftone-bg {
+      background-image: radial-gradient(rgba(13, 13, 13, 0.16) 1.5px, transparent 1.5px);
+      background-size: 8px 8px;
+    }
+    /* Scanline overlay for retro CRT feel */
+    .crt-lines {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+    /* Marquee ticker */
+    .ticker { animation: ticker 22s linear infinite; width: max-content; }
+    .ticker:hover { animation-play-state: paused; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    /* Card entrance pop */
+    .pop-in { opacity: 0; transform: translateY(18px) scale(0.98); animation: popIn 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards; }
+    @keyframes popIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+    /* Tag chips */
+    .tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(13, 13, 13, 0.85);
+      color: #F3EFE6;
+      padding: 2px 7px; border: 2px solid #0D0D0D;
+    }
+    .tag-light { background: #fff; color: #0D0D0D; border: 2px solid #0D0D0D; }
+    /* Key cap */
+    .key {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 30px; height: 30px; padding: 0 7px;
+      background: #fff; border: 3px solid #0D0D0D; box-shadow: 3px 3px 0 #0D0D0D;
+      font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 12px;
+    }
+    /* Big watermark number behind hero */
+    .hero-ghost {
+      position: absolute; right: -0.06em; top: -0.42em;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(160px, 26vw, 360px);
+      line-height: 1; color: transparent;
+      -webkit-text-stroke: 3px rgba(13,13,13,0.14);
+      pointer-events: none; user-select: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker { animation: none; }
+      .pop-in { animation: none; opacity: 1; transform: none; }
+      .animate-pulse { animation: none; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-yellow-300 selection:text-black">
+
+  <!-- ======================================================================
+       SVG ART SPRITE — stylized vector art kept as automatic fallback art
+       for every card. Your real poster images sit on top when present.
+  ======================================================================= -->
+  <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="p-win" width="15" height="15" patternUnits="userSpaceOnUse">
+        <rect x="2" y="2" width="7" height="7" fill="#FFD026" opacity="0.5"/>
+      </pattern>
+      <pattern id="p-speckle" width="18" height="18" patternUnits="userSpaceOnUse">
+        <rect x="3" y="3" width="6" height="6" fill="#5C3D22"/>
+        <rect x="12" y="11" width="5" height="5" fill="#5C3D22"/>
+      </pattern>
+      <pattern id="p-scan" width="6" height="6" patternUnits="userSpaceOnUse">
+        <rect width="6" height="3" fill="#0D0D0D" opacity="0.16"/>
+      </pattern>
+      <clipPath id="clip-sun5"><circle cx="150" cy="216" r="80"/></clipPath>
+      <clipPath id="clip-sun-vc"><circle cx="150" cy="118" r="56"/></clipPath>
+    </defs>
+
+    <!-- GAME 01 — GTA 2 : top-down neon grid city chase -->
+    <symbol id="art-gta2" viewBox="0 0 300 400">
+      <rect width="300" height="400" fill="#221446"/>
+      <g fill="#39235F">
+        <rect x="8" y="6" width="116" height="90"/><rect x="176" y="6" width="116" height="90"/>
+        <rect x="8" y="140" width="116" height="94"/><rect x="176" y="140" width="116" height="94"/>
+        <rect x="8" y="278" width="116" height="70"/><rect x="176" y="278" width="116" height="70"/>
+      </g>
+      <g fill="url(#p-win)">
+        <rect x="8" y="6" width="116" height="90"/><rect x="176" y="6" width="116" height="90"/>
+        <rect x="8" y="140" width="116" height="94"/><rect x="176" y="140" width="116" height="94"/>
+        <rect x="8" y="278" width="116" height="70"/><rect x="176" y="278" width="116" height="70"/>
+      </g>
+      <g fill="#54349B">
+        <rect x="0" y="100" width="300" height="36"/>
+        <rect x="0" y="238" width="300" height="36"/>
+        <rect x="128" y="0" width="40" height="400"/>
+      </g>
+      <g fill="#FFD026">
+        <rect x="146" y="8" width="4" height="18"/><rect x="146" y="34" width="4" height="18"/><rect x="146" y="60" width="4" height="18"/>
+        <rect x="146" y="86" width="4" height="18"/><rect x="146" y="112" width="4" height="18"/><rect x="146" y="138" width="4" height="18"/>
+        <rect x="146" y="164" width="4" height="18"/><rect x="146" y="190" width="4" height="18"/><rect x="146" y="216" width="4" height="18"/>
+        <rect x="146" y="242" width="4" height="18"/><rect x="146" y="268" width="4" height="18"/><rect x="146" y="294" width="4" height="18"/>
+        <rect x="8" y="116" width="18" height="4"/><rect x="34" y="116" width="18" height="4"/><rect x="60" y="116" width="18" height="4"/>
+        <rect x="86" y="116" width="18" height="4"/><rect x="176" y="116" width="18" height="4"/><rect x="202" y="116" width="18" height="4"/>
+        <rect x="228" y="116" width="18" height="4"/><rect x="254" y="116" width="18" height="4"/>
+        <rect x="8" y="254" width="18" height="4"/><rect x="34" y="254" width="18" height="4"/><rect x="60" y="254" width="18" height="4"/>
+        <rect x="86" y="254" width="18" height="4"/><rect x="176" y="254" width="18" height="4"/><rect x="202" y="254" width="18" height="4"/>
+        <rect x="228" y="254" width="18" height="4"/><rect x="254" y="254" width="18" height="4"/>
+      </g>
+      <rect x="140" y="288" width="26" height="10" fill="#FFD026" opacity="0.45"/>
+      <g>
+        <rect x="140" y="148" width="26" height="44" fill="#FFD026" stroke="#0D0D0D" stroke-width="4"/>
+        <rect x="145" y="172" width="16" height="10" fill="#4CC3FF"/>
+        <rect x="145" y="154" width="16" height="7" fill="#0D0D0D"/>
+      </g>
+      <g>
+        <rect x="140" y="298" width="26" height="48" fill="#FF5757" stroke="#0D0D0D" stroke-width="4"/>
+        <rect x="145" y="308" width="16" height="10" fill="#4CC3FF"/>
+        <rect x="142" y="340" width="22" height="5" fill="#0D0D0D"/>
+      </g>
+      <text x="238" y="300" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="120" fill="#FFD026" stroke="#0D0D0D" stroke-width="9" paint-order="stroke">2</text>
+      <rect width="300" height="400" fill="url(#p-scan)"/>
+      <rect x="0" y="352" width="300" height="48" fill="#0D0D0D"/>
+      <text x="150" y="383" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="20" letter-spacing="1" fill="#F3EFE6">GRAND THEFT AUTO <tspan fill="#FFD026">2</tspan></text>
+    </symbol>
+
+    <!-- GAME 02 — GTA III : neon night skyline -->
+    <symbol id="art-gta3" viewBox="0 0 300 400">
+      <rect width="300" height="400" fill="#1B0C12"/>
+      <g fill="#F3EFE6" opacity="0.85">
+        <rect x="24" y="30" width="4" height="4"/><rect x="70" y="18" width="3" height="3"/><rect x="120" y="44" width="3" height="3"/>
+        <rect x="180" y="24" width="4" height="4"/><rect x="268" y="120" width="3" height="3"/><rect x="42" y="90" width="3" height="3"/>
+        <rect x="160" y="70" width="3" height="3"/><rect x="96" y="66" width="4" height="4"/>
+      </g>
+      <circle cx="238" cy="62" r="30" fill="#F3EFE6"/>
+      <circle cx="227" cy="54" r="5" fill="#D8D2C3"/><circle cx="248" cy="74" r="4" fill="#D8D2C3"/>
+      <g fill="#2C1520">
+        <rect x="0" y="150" width="54" height="210"/><rect x="60" y="118" width="44" height="242"/>
+        <rect x="112" y="170" width="40" height="190"/><rect x="158" y="108" width="52" height="252"/>
+        <rect x="216" y="160" width="40" height="200"/><rect x="262" y="140" width="38" height="220"/>
+      </g>
+      <g fill="#120710">
+        <rect x="10" y="200" width="40" height="160"/><rect x="58" y="180" width="34" height="180"/>
+        <rect x="100" y="215" width="46" height="145"/><rect x="152" y="185" width="40" height="175"/>
+        <rect x="198" y="205" width="42" height="155"/><rect x="246" y="190" width="40" height="170"/>
+      </g>
+      <g fill="url(#p-win)" opacity="0.5">
+        <rect x="10" y="200" width="40" height="160"/><rect x="58" y="180" width="34" height="180"/>
+        <rect x="100" y="215" width="46" height="145"/><rect x="152" y="185" width="40" height="175"/>
+        <rect x="198" y="205" width="42" height="155"/><rect x="246" y="190" width="40" height="170"/>
+      </g>
+      <rect x="62" y="120" width="34" height="14" fill="#FF5757"/>
+      <rect x="200" y="108" width="40" height="14" fill="#4CC3FF"/>
+      <text x="80" y="330" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="130" fill="#FF5757" stroke="#0D0D0D" stroke-width="9" paint-order="stroke">III</text>
+      <rect width="300" height="400" fill="url(#p-scan)"/>
+      <rect x="0" y="352" width="300" height="48" fill="#0D0D0D"/>
+      <g fill="#FFD026"><rect x="12" y="374" width="18" height="4"/><rect x="52" y="374" width="18" height="4"/><rect x="92" y="374" width="18" height="4"/><rect x="132" y="374" width="18" height="4"/><rect x="172" y="374" width="18" height="4"/><rect x="212" y="374" width="18" height="4"/><rect x="252" y="374" width="18" height="4"/></g>
+      <text x="150" y="366" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="17" letter-spacing="1" fill="#F3EFE6">GRAND THEFT AUTO <tspan fill="#FF5757">III</tspan></text>
+    </symbol>
+
+    <!-- GAME 03 — GTA IV : harborside statue + skyline -->
+    <symbol id="art-gta4" viewBox="0 0 300 400">
+      <rect width="300" height="400" fill="#BEE9FF"/>
+      <g fill="#FFFFFF" opacity="0.92">
+        <rect x="26" y="42" width="72" height="16"/><rect x="46" y="28" width="42" height="15"/>
+        <rect x="188" y="70" width="82" height="16"/><rect x="208" y="56" width="44" height="15"/>
+      </g>
+      <g fill="#7FB6D9">
+        <rect x="0" y="160" width="44" height="148"/><rect x="52" y="130" width="38" height="178"/>
+        <rect x="98" y="175" width="42" height="133"/><rect x="148" y="140" width="40" height="168"/>
+        <rect x="196" y="120" width="36" height="188"/><rect x="240" y="165" width="60" height="143"/>
+      </g>
+      <g fill="#22415C">
+        <rect x="16" y="205" width="40" height="103"/><rect x="64" y="185" width="34" height="123"/>
+        <rect x="106" y="218" width="44" height="90"/><rect x="158" y="192" width="40" height="116"/>
+        <rect x="204" y="178" width="30" height="130"/><rect x="246" y="208" width="46" height="100"/>
+      </g>
+      <g fill="url(#p-win)" opacity="0.4">
+        <rect x="16" y="205" width="40" height="103"/><rect x="64" y="185" width="34" height="123"/>
+        <rect x="106" y="218" width="44" height="90"/><rect x="158" y="192" width="40" height="116"/>
+        <rect x="204" y="178" width="30" height="130"/><rect x="246" y="208" width="46" height="100"/>
+      </g>
+      <rect x="230" y="298" width="66" height="12" fill="#3C4C5C"/>
+      <rect x="238" y="250" width="50" height="48" fill="#5E7488"/>
+      <rect x="248" y="182" width="28" height="68" fill="#57B481"/>
+      <rect x="256" y="168" width="12" height="13" fill="#57B481"/>
+      <rect x="252" y="161" width="20" height="6" fill="#FFD026"/>
+      <rect x="268" y="148" width="8" height="34" fill="#57B481"/>
+      <rect x="263" y="138" width="17" height="12" fill="#FFD026"/>
+      <rect x="0" y="308" width="300" height="44" fill="#4CC3FF"/>
+      <g fill="#FFFFFF" opacity="0.75">
+        <rect x="18" y="318" width="26" height="5"/><rect x="88" y="332" width="30" height="5"/><rect x="158" y="320" width="24" height="5"/><rect x="238" y="330" width="28" height="5"/>
+      </g>
+      <text x="88" y="140" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="105" fill="#FFD026" stroke="#0D0D0D" stroke-width="9" paint-order="stroke">IV</text>
+      <rect x="0" y="352" width="300" height="48" fill="#0D0D0D"/>
+      <g fill="#FFD026"><rect x="12" y="374" width="18" height="4"/><rect x="52" y="374" width="18" height="4"/><rect x="92" y="374" width="18" height="4"/><rect x="132" y="374" width="18" height="4"/><rect x="172" y="374" width="18" height="4"/><rect x="212" y="374" width="18" height="4"/><rect x="252" y="374" width="18" height="4"/></g>
+      <text x="150" y="366" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="17" letter-spacing="1" fill="#F3EFE6">GRAND THEFT AUTO <tspan fill="#4CC3FF">IV</tspan></text>
+    </symbol>
+
+    <!-- GAME 04 — GTA V : striped sunset, palms, big V -->
+    <symbol id="art-gta5" viewBox="0 0 300 400">
+      <rect x="0" y="0" width="300" height="82" fill="#FFD026"/>
+      <rect x="0" y="82" width="300" height="70" fill="#FFB03A"/>
+      <rect x="0" y="152" width="300" height="66" fill="#FF8A5C"/>
+      <rect x="0" y="218" width="300" height="62" fill="#FF6FA5"/>
+      <circle cx="150" cy="216" r="80" fill="#F3EFE6"/>
+      <g clip-path="url(#clip-sun5)" fill="#FF6FA5">
+        <rect x="58" y="208" width="184" height="8"/>
+        <rect x="62" y="228" width="176" height="10"/>
+        <rect x="70" y="252" width="160" height="12"/>
+        <rect x="80" y="276" width="140" height="14"/>
+      </g>
+      <g fill="#0D0D0D">
+        <polygon points="0,282 52,224 104,282"/>
+        <polygon points="84,282 128,238 176,282"/>
+        <polygon points="196,282 244,232 292,282"/>
+      </g>
+      <rect x="0" y="280" width="300" height="24" fill="#0D0D0D"/>
+      <rect x="0" y="304" width="300" height="48" fill="#221814"/>
+      <g fill="#FFD026"><rect x="14" y="326" width="20" height="5"/><rect x="58" y="326" width="20" height="5"/><rect x="102" y="326" width="20" height="5"/><rect x="146" y="326" width="20" height="5"/><rect x="190" y="326" width="20" height="5"/><rect x="234" y="326" width="20" height="5"/><rect x="272" y="326" width="20" height="5"/></g>
+      <rect x="30" y="176" width="10" height="106" fill="#0D0D0D"/>
+      <g fill="#0D0D0D">
+        <polygon points="35,180 2,158 12,150 38,172"/>
+        <polygon points="35,180 68,158 58,150 32,172"/>
+        <polygon points="35,180 14,120 26,116 42,172"/>
+        <polygon points="35,180 56,120 44,116 30,172"/>
+      </g>
+      <rect x="258" y="196" width="8" height="86" fill="#0D0D0D"/>
+      <g fill="#0D0D0D">
+        <polygon points="262,200 234,182 242,174 264,192"/>
+        <polygon points="262,200 288,182 280,174 258,192"/>
+        <polygon points="262,200 244,146 254,142 266,192"/>
+        <polygon points="262,200 280,146 270,142 258,192"/>
+      </g>
+      <text x="150" y="196" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="120" fill="#4ADE80" stroke="#0D0D0D" stroke-width="9" paint-order="stroke">V</text>
+      <rect x="0" y="352" width="300" height="48" fill="#0D0D0D"/>
+      <text x="150" y="383" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="20" letter-spacing="1" fill="#F3EFE6">GRAND THEFT AUTO <tspan fill="#4ADE80">V</tspan></text>
+    </symbol>
+
+    <!-- GAME 05 — MINECRAFT : voxel overworld -->
+    <symbol id="art-mc" viewBox="0 0 300 400">
+      <rect width="300" height="400" fill="#6FC3FF"/>
+      <rect x="226" y="34" width="44" height="44" fill="#FFD026" stroke="#0D0D0D" stroke-width="3"/>
+      <g fill="#FFFFFF" stroke="#0D0D0D" stroke-width="3">
+        <rect x="26" y="62" width="70" height="20"/><rect x="44" y="44" width="38" height="18"/>
+        <rect x="148" y="104" width="56" height="18"/>
+      </g>
+      <rect x="58" y="202" width="26" height="92" fill="#6B4423" stroke="#0D0D0D" stroke-width="3"/>
+      <g fill="#3FA34D" stroke="#0D0D0D" stroke-width="3">
+        <rect x="36" y="170" width="70" height="42"/><rect x="50" y="142" width="42" height="30"/>
+      </g>
+      <rect x="196" y="238" width="46" height="46" fill="#8A8A8A" stroke="#0D0D0D" stroke-width="3"/>
+      <g fill="#4CC3FF">
+        <rect x="206" y="248" width="10" height="10"/><rect x="226" y="262" width="10" height="10"/><rect x="212" y="268" width="9" height="9"/>
+      </g>
+      <rect x="128" y="250" width="46" height="42" fill="#E23B3B" stroke="#0D0D0D" stroke-width="3"/>
+      <rect x="128" y="264" width="46" height="14" fill="#FFFFFF"/>
+      <text x="151" y="276" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-weight="700" font-size="11" fill="#0D0D0D">TNT</text>
+      <rect x="0" y="292" width="300" height="20" fill="#58C24F"/>
+      <rect x="0" y="312" width="300" height="88" fill="#7A5230"/>
+      <rect x="0" y="312" width="300" height="88" fill="url(#p-speckle)"/>
+      <g stroke="#0D0D0D" stroke-width="3"><rect x="0" y="292" width="300" height="20" fill="none"/></g>
+      <g fill="#58C24F" stroke="#0D0D0D" stroke-width="2">
+        <rect x="16" y="284" width="14" height="9"/><rect x="150" y="284" width="14" height="9"/><rect x="252" y="284" width="14" height="9"/>
+      </g>
+      <rect x="0" y="352" width="300" height="48" fill="#0D0D0D"/>
+      <text x="150" y="383" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="21" letter-spacing="1" fill="#F3EFE6">MINE<tspan fill="#58C24F">CRAFT</tspan></text>
+    </symbol>
+
+    <!-- GAME 06 — GTA VICE CITY : 1986 neon ocean drive -->
+    <symbol id="art-vice" viewBox="0 0 300 400">
+      <rect x="0" y="0" width="300" height="76" fill="#FF6EC7"/>
+      <rect x="0" y="76" width="300" height="48" fill="#FF8FB0"/>
+      <rect x="0" y="124" width="300" height="44" fill="#FFC77E"/>
+      <circle cx="150" cy="118" r="56" fill="#FFD026"/>
+      <g clip-path="url(#clip-sun-vc)" fill="#FF6EC7">
+        <rect x="80" y="118" width="140" height="8"/>
+        <rect x="86" y="136" width="128" height="9"/>
+        <rect x="94" y="154" width="112" height="10"/>
+      </g>
+      <rect x="0" y="168" width="300" height="72" fill="#2AB5AC"/>
+      <g fill="#7FE5DC">
+        <rect x="12" y="184" width="34" height="4"/><rect x="120" y="198" width="42" height="4"/>
+        <rect x="236" y="180" width="30" height="4"/><rect x="64" y="212" width="38" height="4"/>
+      </g>
+      <g fill="#0D0D0D">
+        <rect x="28" y="196" width="9" height="76"/>
+        <polygon points="32,200 0,180 5,172 36,194"/>
+        <polygon points="32,200 64,180 59,172 28,194"/>
+        <polygon points="32,200 14,152 25,148 40,194"/>
+        <polygon points="32,200 50,152 39,148 26,194"/>
+        <rect x="262" y="196" width="9" height="76"/>
+        <polygon points="266,200 234,180 239,172 270,194"/>
+        <polygon points="266,200 298,180 293,172 262,194"/>
+        <polygon points="266,200 248,152 259,148 274,194"/>
+        <polygon points="266,200 284,152 273,148 260,194"/>
+      </g>
+      <rect x="0" y="226" width="300" height="10" fill="#0D0D0D"/>
+      <g fill="#0D0D0D">
+        <rect x="24" y="226" width="6" height="16"/><rect x="146" y="226" width="6" height="16"/><rect x="268" y="226" width="6" height="16"/>
+      </g>
+      <rect x="0" y="242" width="300" height="110" fill="#241238"/>
+      <rect x="0" y="242" width="300" height="4" fill="#FF6EC7"/>
+      <g fill="#FFD026">
+        <rect x="142" y="258" width="16" height="6"/><rect x="142" y="280" width="16" height="6"/>
+        <rect x="142" y="302" width="16" height="6"/><rect x="142" y="324" width="16" height="6"/>
+      </g>
+      <g>
+        <rect x="118" y="296" width="64" height="20" fill="#F3EFE6" stroke="#0D0D0D" stroke-width="4"/>
+        <rect x="126" y="284" width="42" height="14" fill="#F3EFE6" stroke="#0D0D0D" stroke-width="4"/>
+        <rect x="131" y="287" width="32" height="7" fill="#40C9C0"/>
+        <rect x="118" y="304" width="64" height="5" fill="#FF6EC7"/>
+        <rect x="124" y="314" width="12" height="8" fill="#0D0D0D"/>
+        <rect x="164" y="314" width="12" height="8" fill="#0D0D0D"/>
+      </g>
+      <text x="150" y="212" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="96" fill="#F3EFE6" stroke="#0D0D0D" stroke-width="9" paint-order="stroke">VC</text>
+      <rect width="300" height="400" fill="url(#p-scan)"/>
+      <rect x="0" y="352" width="300" height="48" fill="#0D0D0D"/>
+      <g fill="#FFD026"><rect x="12" y="374" width="18" height="4"/><rect x="52" y="374" width="18" height="4"/><rect x="92" y="374" width="18" height="4"/><rect x="132" y="374" width="18" height="4"/><rect x="172" y="374" width="18" height="4"/><rect x="212" y="374" width="18" height="4"/><rect x="252" y="374" width="18" height="4"/></g>
+      <text x="150" y="366" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="14" letter-spacing="1" fill="#F3EFE6">GRAND THEFT AUTO <tspan fill="#FF6EC7">VICE CITY</tspan></text>
+    </symbol>
+  </svg>
+
+  <!-- ======================================================================
+       TOP BRUTALIST NAVBAR
+  ======================================================================= -->
+  <header class="bg-[#0D0D0D] text-white border-b-4 border-[#0D0D0D] sticky top-0 z-30">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
+      <a href="#top" id="brand-home-link" class="flex items-center gap-3 group focus:outline-none" aria-label="PLAY FREE home">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 bg-[#FFD026] border-2 border-white flex items-center justify-center shadow-[3px_3px_0px_#FF5757] group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] transition-transform">
+          <svg class="w-8 h-8 text-[#0D0D0D]" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M3 2h2v2H3V2zm8 0h2v2h-2V2zM2 4h12v7H2V4zm2 2v2h2V6H4zm6 0v2h2V6h-2zM1 6h1v3H1V6zm13 0h1v3h-1V6zM3 11h2v2H3v-2zm8 0h2v2h-2v-2zM5 12h6v2H5v-2z"/>
+          </svg>
+        </div>
+        <div class="flex flex-col leading-none">
+          <span class="font-display text-xl sm:text-2xl tracking-wider text-[#FFD026] drop-shadow-[2px_2px_0px_#FF5757]">PLAY</span>
+          <span class="font-display text-xl sm:text-2xl tracking-wider text-[#FF5757] -mt-1 drop-shadow-[2px_2px_0px_#FFD026]">FREE</span>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="bg-white text-[#0D0D0D] border-2 border-white px-3 py-1.5 font-mono-brutal text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[3px_3px_0px_#FFD026] hover:bg-[#FFD026] transition-all flex items-center gap-1.5">
+          ← CABINET Arcade
+        </a>
+        <span class="hidden md:inline-flex items-center gap-2 bg-[#1F1F1F] border-2 border-white/80 px-3 py-1.5 font-mono-brutal text-xs font-bold uppercase tracking-wider text-[#5CE582]">
+          <span class="w-2.5 h-2.5 bg-[#5CE582] inline-block animate-pulse"></span>
+          6 FREE GAMES READY
+        </span>
+        <button id="sound-toggle-btn" type="button" class="bg-[#FFD026] text-[#0D0D0D] border-2 border-white px-3 py-1.5 font-mono-brutal text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[3px_3px_0px_#ffffff] hover:bg-[#ffe066] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex items-center gap-1.5">
+          <span id="sound-icon">🔊</span>
+          <span id="sound-label">SFX: ON</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MARQUEE TICKER -->
+  <div class="bg-[#FFD026] border-b-4 border-[#0D0D0D] overflow-hidden py-1.5" aria-hidden="true">
+    <div class="ticker flex whitespace-nowrap font-mono-brutal text-xs font-bold uppercase tracking-[0.2em] text-[#0D0D0D]">
+      <span class="flex">
+        <span class="px-6">★ 100% FREE</span><span class="px-6">NO INSTALL</span><span class="px-6">NO ACCOUNT</span><span class="px-6">6 GAMES</span><span class="px-6">PLAY IN BROWSER</span><span class="px-6">HIGH SCORES SAVED</span><span class="px-6">WORKS OFFLINE</span><span class="px-6">FAN-MADE MINI GAMES</span>
+      </span>
+      <span class="flex">
+        <span class="px-6">★ 100% FREE</span><span class="px-6">NO INSTALL</span><span class="px-6">NO ACCOUNT</span><span class="px-6">6 GAMES</span><span class="px-6">PLAY IN BROWSER</span><span class="px-6">HIGH SCORES SAVED</span><span class="px-6">WORKS OFFLINE</span><span class="px-6">FAN-MADE MINI GAMES</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main id="top" class="flex-1 max-w-[1400px] w-full mx-auto px-4 sm:px-8 py-8 sm:py-12">
+
+    <!-- HERO SECTION -->
+    <section class="relative mb-12 sm:mb-16">
+      <div class="hero-ghost" aria-hidden="true">FREE</div>
+      <h1 class="font-display text-4xl sm:text-6xl lg:text-[72px] uppercase leading-[0.98] tracking-tight text-[#0D0D0D] mb-5 relative">
+        PLAY CLASSIC GAMES<br />
+        <span class="relative inline-block z-0">IN YOUR BROWSER
+          <span class="absolute left-0 -bottom-1 h-3 sm:h-4 w-full bg-[#FFD026] -z-10 border-2 border-[#0D0D0D]" aria-hidden="true"></span>
+        </span>
+      </h1>
+      <p class="font-mono-brutal text-base sm:text-xl font-bold text-[#1F1F1F] tracking-tight mb-6">
+        6 FREE FAN-MADE MINI GAMES READY TO PLAY. NO INSTALL. NO ACCOUNT.
+      </p>
+      <div class="flex flex-wrap gap-2.5">
+        <span class="tag">■ 100% FREE</span>
+        <span class="tag">■ NO DOWNLOAD</span>
+        <span class="tag">■ NO LOGIN</span>
+        <span class="tag">■ RUNS OFFLINE</span>
+        <span class="tag">■ SCORES SAVED</span>
+      </div>
+      <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono-brutal text-xs sm:text-sm font-bold uppercase text-[#0D0D0D]/80">
+        <span class="flex items-center gap-2"><span class="key">◀</span><span class="key">▶</span><span class="key">▲</span><span class="key">▼</span> / <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> MOVE</span>
+        <span class="flex items-center gap-2"><span class="key">SPACE</span> FIRE / TURBO</span>
+        <span class="flex items-center gap-2"><span class="key">P</span> PAUSE</span>
+      </div>
+    </section>
+
+    <!-- FEATURED COLORED GAME CARDS -->
+    <section aria-label="Featured 6 Games" class="mb-14 sm:mb-20">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div class="bg-[#0D0D0D] text-white px-5 py-2.5 border-4 border-[#0D0D0D] shadow-[5px_5px_0px_#FF5757]">
+          <h2 class="font-display text-xl sm:text-2xl uppercase tracking-wide">FEATURED GAMES</h2>
+        </div>
+        <p class="font-mono-brutal text-xs sm:text-sm font-bold uppercase text-[#0D0D0D]/80">
+          CLICK A CARD TO LAUNCH INSTANTLY
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+
+        <!-- GAME 1: PURPLE — GRAND THEFT AUTO 2 -->
+        <article data-game-id="0" tabindex="0" role="button" aria-label="Play Grand Theft Auto 2 mini game"
+          class="game-trigger group brutal-box brutal-card bg-[#A78BFA] halftone-bg p-5 flex flex-col justify-between cursor-pointer select-none min-h-[360px] pop-in" style="animation-delay:0ms">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="tag">GAME 01</span>
+              <span class="tag tag-light">IN-BROWSER</span>
+            </div>
+            <h2 class="font-display text-2xl uppercase leading-tight text-[#0D0D0D] mt-2 mb-2">GRAND THEFT<br />AUTO 2</h2>
+            <p class="font-medium text-sm text-[#0D0D0D]/90 leading-snug">Top-down neon grid chase. Dodge traffic, chain near-misses, outrun the heat.</p>
+            <div class="mt-3 flex gap-1.5 flex-wrap">
+              <span class="tag">DRIVE</span><span class="tag tag-light">1999</span><span class="tag">★★☆☆</span>
+            </div>
+          </div>
+          <div class="mt-6 flex items-end justify-between gap-3 pt-2">
+            <div class="w-32 h-28 border-[3px] border-[#0D0D0D] overflow-hidden shadow-[3px_3px_0px_#0D0D0D] shrink-0 relative">
+              <svg class="w-full h-full block" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#art-gta2"/></svg>
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                <span class="bg-[#FFD026] text-black font-mono-brutal text-xs font-bold px-2 py-0.5 border border-black">PLAY ▶</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-mono-brutal font-bold text-3xl leading-none text-[#0D0D0D]">01</div>
+              <div class="font-mono-brutal text-xs font-bold uppercase tracking-wider text-[#0D0D0D] mt-1 bg-white/85 px-1.5 py-0.5 border-2 border-[#0D0D0D] inline-block">PLAY ▶</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- GAME 2: RED — GRAND THEFT AUTO III -->
+        <article data-game-id="1" tabindex="0" role="button" aria-label="Play Grand Theft Auto III mini game"
+          class="game-trigger group brutal-box brutal-card bg-[#FF5757] halftone-bg p-5 flex flex-col justify-between cursor-pointer select-none min-h-[360px] pop-in" style="animation-delay:60ms">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="tag">GAME 02</span>
+              <span class="tag tag-light">IN-BROWSER</span>
+            </div>
+            <h2 class="font-display text-2xl uppercase leading-tight text-[#0D0D0D] mt-2 mb-2">GRAND THEFT<br />AUTO III</h2>
+            <p class="font-medium text-sm text-[#0D0D0D]/90 leading-snug">Neon alley turf showdown. Jump, blast rival crews, survive endless waves.</p>
+            <div class="mt-3 flex gap-1.5 flex-wrap">
+              <span class="tag">BRAWLER</span><span class="tag tag-light">2001</span><span class="tag">★★★☆</span>
+            </div>
+          </div>
+          <div class="mt-6 flex items-end justify-between gap-3 pt-2">
+            <div class="w-32 h-28 border-[3px] border-[#0D0D0D] overflow-hidden shadow-[3px_3px_0px_#0D0D0D] shrink-0 relative">
+              <svg class="w-full h-full block" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#art-gta3"/></svg>
+              <img src="posters/gta-iii.jpg" alt="Grand Theft Auto III cover poster" loading="lazy"
+                   class="absolute inset-0 w-full h-full object-contain block opacity-0 poster-img transition-transform duration-200 group-hover:scale-[1.04]"
+                   onerror="this.remove()">
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                <span class="bg-[#FFD026] text-black font-mono-brutal text-xs font-bold px-2 py-0.5 border border-black">PLAY ▶</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-mono-brutal font-bold text-3xl leading-none text-[#0D0D0D]">02</div>
+              <div class="font-mono-brutal text-xs font-bold uppercase tracking-wider text-[#0D0D0D] mt-1 bg-white/85 px-1.5 py-0.5 border-2 border-[#0D0D0D] inline-block">PLAY ▶</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- GAME 3: SKY BLUE — GRAND THEFT AUTO IV -->
+        <article data-game-id="2" tabindex="0" role="button" aria-label="Play Grand Theft Auto IV mini game"
+          class="game-trigger group brutal-box brutal-card bg-[#4CC3FF] halftone-bg p-5 flex flex-col justify-between cursor-pointer select-none min-h-[360px] pop-in" style="animation-delay:120ms">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="tag">GAME 03</span>
+              <span class="tag tag-light">IN-BROWSER</span>
+            </div>
+            <h2 class="font-display text-2xl uppercase leading-tight text-[#0D0D0D] mt-2 mb-2">GRAND THEFT<br />AUTO IV</h2>
+            <p class="font-medium text-sm text-[#0D0D0D]/90 leading-snug">Armored heist run. Blast convoy raids, grab armor drops, stay alive.</p>
+            <div class="mt-3 flex gap-1.5 flex-wrap">
+              <span class="tag">HEIST RUN</span><span class="tag tag-light">2008</span><span class="tag">★★★☆</span>
+            </div>
+          </div>
+          <div class="mt-6 flex items-end justify-between gap-3 pt-2">
+            <div class="w-32 h-28 border-[3px] border-[#0D0D0D] overflow-hidden shadow-[3px_3px_0px_#0D0D0D] shrink-0 relative">
+              <svg class="w-full h-full block" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#art-gta4"/></svg>
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                <span class="bg-[#FFD026] text-black font-mono-brutal text-xs font-bold px-2 py-0.5 border border-black">PLAY ▶</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-mono-brutal font-bold text-3xl leading-none text-[#0D0D0D]">03</div>
+              <div class="font-mono-brutal text-xs font-bold uppercase tracking-wider text-[#0D0D0D] mt-1 bg-white/85 px-1.5 py-0.5 border-2 border-[#0D0D0D] inline-block">PLAY ▶</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- GAME 4: EMERALD — GRAND THEFT AUTO V -->
+        <article data-game-id="3" tabindex="0" role="button" aria-label="Play Grand Theft Auto V mini game"
+          class="game-trigger group brutal-box brutal-card bg-[#4ADE80] halftone-bg p-5 flex flex-col justify-between cursor-pointer select-none min-h-[360px] pop-in" style="animation-delay:180ms">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="tag">GAME 04</span>
+              <span class="tag tag-light">IN-BROWSER</span>
+            </div>
+            <h2 class="font-display text-2xl uppercase leading-tight text-[#0D0D0D] mt-2 mb-2">GRAND THEFT<br />AUTO V</h2>
+            <p class="font-medium text-sm text-[#0D0D0D]/90 leading-snug">Los Santos chopper blitz. Gun down waves of targets before they reach you.</p>
+            <div class="mt-3 flex gap-1.5 flex-wrap">
+              <span class="tag">SKY ASSAULT</span><span class="tag tag-light">2013</span><span class="tag">★★★★</span>
+            </div>
+          </div>
+          <div class="mt-6 flex items-end justify-between gap-3 pt-2">
+            <div class="w-32 h-28 border-[3px] border-[#0D0D0D] overflow-hidden shadow-[3px_3px_0px_#0D0D0D] shrink-0 relative">
+              <svg class="w-full h-full block" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#art-gta5"/></svg>
+              <img src="posters/gta-v.jpg" alt="Grand Theft Auto V cover poster" loading="lazy"
+                   class="absolute inset-0 w-full h-full object-contain block opacity-0 poster-img transition-transform duration-200 group-hover:scale-[1.04]"
+                   onerror="this.remove()">
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                <span class="bg-[#FFD026] text-black font-mono-brutal text-xs font-bold px-2 py-0.5 border border-black">PLAY ▶</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-mono-brutal font-bold text-3xl leading-none text-[#0D0D0D]">04</div>
+              <div class="font-mono-brutal text-xs font-bold uppercase tracking-wider text-[#0D0D0D] mt-1 bg-white/85 px-1.5 py-0.5 border-2 border-[#0D0D0D] inline-block">PLAY ▶</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- GAME 5: PINK — MINECRAFT -->
+        <article data-game-id="4" tabindex="0" role="button" aria-label="Play Minecraft-style voxel breaker mini game"
+          class="game-trigger group brutal-box brutal-card bg-[#FF7CE5] halftone-bg p-5 flex flex-col justify-between cursor-pointer select-none min-h-[360px] pop-in" style="animation-delay:240ms">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="tag">GAME 05</span>
+              <span class="tag tag-light">IN-BROWSER</span>
+            </div>
+            <h2 class="font-display text-2xl uppercase leading-tight text-[#0D0D0D] mt-2 mb-2">MINECRAFT</h2>
+            <p class="font-medium text-sm text-[#0D0D0D]/90 leading-snug">Voxel block breaker. Mine every crafting block with your diamond ball.</p>
+            <div class="mt-3 flex gap-1.5 flex-wrap">
+              <span class="tag">VOXEL BREAKER</span><span class="tag tag-light">2011</span><span class="tag">★★☆☆</span>
+            </div>
+          </div>
+          <div class="mt-6 flex items-end justify-between gap-3 pt-2">
+            <div class="w-32 h-28 border-[3px] border-[#0D0D0D] overflow-hidden shadow-[3px_3px_0px_#0D0D0D] shrink-0 relative">
+              <svg class="w-full h-full block" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#art-mc"/></svg>
+              <img src="posters/minecraft.jpg" alt="Minecraft cover poster" loading="lazy"
+                   class="absolute inset-0 w-full h-full object-contain block opacity-0 poster-img transition-transform duration-200 group-hover:scale-[1.04]"
+                   onerror="this.remove()">
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                <span class="bg-[#FFD026] text-black font-mono-brutal text-xs font-bold px-2 py-0.5 border border-black">PLAY ▶</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-mono-brutal font-bold text-3xl leading-none text-[#0D0D0D]">05</div>
+              <div class="font-mono-brutal text-xs font-bold uppercase tracking-wider text-[#0D0D0D] mt-1 bg-white/85 px-1.5 py-0.5 border-2 border-[#0D0D0D] inline-block">PLAY ▶</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- GAME 6: TEAL — GRAND THEFT AUTO: VICE CITY -->
+        <article data-game-id="5" tabindex="0" role="button" aria-label="Play Grand Theft Auto Vice City mini game"
+          class="game-trigger group brutal-box brutal-card bg-[#40C9C0] halftone-bg p-5 flex flex-col justify-between cursor-pointer select-none min-h-[360px] pop-in" style="animation-delay:300ms">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="tag">GAME 06</span>
+              <span class="tag tag-light">IN-BROWSER</span>
+            </div>
+            <h2 class="font-display text-2xl uppercase leading-tight text-[#0D0D0D] mt-2 mb-2">GRAND THEFT<br />AUTO: VICE CITY</h2>
+            <p class="font-medium text-sm text-[#0D0D0D]/90 leading-snug">Ocean Drive neon run. Hop roadblocks, grab cash, outrun the sunset.</p>
+            <div class="mt-3 flex gap-1.5 flex-wrap">
+              <span class="tag">NEON RUN</span><span class="tag tag-light">1986</span><span class="tag">★★★★</span>
+            </div>
+          </div>
+          <div class="mt-6 flex items-end justify-between gap-3 pt-2">
+            <div class="w-32 h-28 border-[3px] border-[#0D0D0D] overflow-hidden shadow-[3px_3px_0px_#0D0D0D] shrink-0 relative">
+              <svg class="w-full h-full block" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#art-vice"/></svg>
+              <img src="posters/vice-city.jpg" alt="Grand Theft Auto Vice City cover poster" loading="lazy"
+                   class="absolute inset-0 w-full h-full object-contain block opacity-0 poster-img transition-transform duration-200 group-hover:scale-[1.04]"
+                   onerror="this.remove()">
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                <span class="bg-[#FFD026] text-black font-mono-brutal text-xs font-bold px-2 py-0.5 border border-black">PLAY ▶</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-mono-brutal font-bold text-3xl leading-none text-[#0D0D0D]">06</div>
+              <div class="font-mono-brutal text-xs font-bold uppercase tracking-wider text-[#0D0D0D] mt-1 bg-white/85 px-1.5 py-0.5 border-2 border-[#0D0D0D] inline-block">PLAY ▶</div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- START HERE POSTER WALL -->
+    <section aria-label="Start Here Poster Grid" class="mb-14 sm:mb-20">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div class="bg-[#0D0D0D] text-white px-5 py-2.5 border-4 border-[#0D0D0D] shadow-[5px_5px_0px_#FFD026]">
+          <h2 class="font-display text-xl sm:text-2xl uppercase tracking-wide">START HERE</h2>
+        </div>
+        <p class="font-mono-brutal text-xs sm:text-sm font-bold uppercase text-[#0D0D0D]/80">
+          TALL POSTERS // YOUR BEST SCORE SHOWS ON EACH
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+
+        <!-- Poster 1 -->
+        <div data-game-id="0" tabindex="0" role="button" aria-label="Play Grand Theft Auto 2"
+          class="game-trigger group brutal-box brutal-card bg-white flex flex-col cursor-pointer pop-in" style="animation-delay:0ms">
+          <div class="p-2.5 pb-0">
+            <div class="aspect-[3/4] w-full border-[3px] border-[#0D0D0D] overflow-hidden bg-[#0D0D0D] relative">
+              <svg class="w-full h-full block transition-transform duration-200 group-hover:scale-[1.04]" viewBox="0 0 300 400" aria-hidden="true"><use href="#art-gta2"/></svg>
+              <span class="absolute top-2 left-2 bg-[#0D0D0D] text-white font-mono-brutal text-[10px] font-bold px-1.5 py-0.5">1999</span>
+              <span class="absolute top-2 right-2 bg-[#FFD026] text-[#0D0D0D] font-mono-brutal text-xs font-bold px-2 py-0.5 border-2 border-[#0D0D0D]">HI: <span id="hi-score-0">0</span></span>
+              <div class="absolute inset-x-0 bottom-0 bg-[#0D0D0D]/85 py-1.5 text-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="font-mono-brutal text-xs font-bold text-[#FFD026]">▶ CLICK TO PLAY</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 flex flex-col flex-1">
+            <h3 class="font-bold text-lg leading-tight text-[#0D0D0D] mb-1">Grand Theft Auto 2</h3>
+            <p class="font-mono-brutal text-[10px] uppercase tracking-wide text-[#0D0D0D]/70 mb-3">TOP-DOWN CHASE // DRIVE</p>
+            <div class="mt-auto flex items-center justify-between pt-2 border-t-2 border-[#0D0D0D]/15">
+              <div class="flex items-center gap-2">
+                <span class="w-3.5 h-3.5 bg-[#A78BFA] border-2 border-[#0D0D0D] inline-block"></span>
+                <span class="font-mono-brutal text-xs font-bold uppercase text-[#0D0D0D]/80">PC</span>
+              </div>
+              <span class="font-mono-brutal text-xs font-bold uppercase bg-[#0D0D0D] text-white px-2 py-0.5 group-hover:bg-[#A78BFA] group-hover:text-[#0D0D0D] transition-colors">PLAY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Poster 2 -->
+        <div data-game-id="1" tabindex="0" role="button" aria-label="Play Grand Theft Auto III"
+          class="game-trigger group brutal-box brutal-card bg-white flex flex-col cursor-pointer pop-in" style="animation-delay:60ms">
+          <div class="p-2.5 pb-0">
+            <div class="aspect-[3/4] w-full border-[3px] border-[#0D0D0D] overflow-hidden bg-[#0D0D0D] relative">
+              <svg class="w-full h-full block transition-transform duration-200 group-hover:scale-[1.04]" viewBox="0 0 300 400" aria-hidden="true"><use href="#art-gta3"/></svg>
+              <img src="posters/gta-iii.jpg" alt="Grand Theft Auto III cover poster" loading="lazy"
+                   class="absolute inset-0 w-full h-full object-contain block opacity-0 poster-img transition-transform duration-200 group-hover:scale-[1.04]"
+                   onerror="this.remove()">
+              <span class="absolute top-2 left-2 bg-[#0D0D0D] text-white font-mono-brutal text-[10px] font-bold px-1.5 py-0.5">2001</span>
+              <span class="absolute top-2 right-2 bg-[#FFD026] text-[#0D0D0D] font-mono-brutal text-xs font-bold px-2 py-0.5 border-2 border-[#0D0D0D]">HI: <span id="hi-score-1">0</span></span>
+              <div class="absolute inset-x-0 bottom-0 bg-[#0D0D0D]/85 py-1.5 text-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="font-mono-brutal text-xs font-bold text-[#FFD026]">▶ CLICK TO PLAY</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 flex flex-col flex-1">
+            <h3 class="font-bold text-lg leading-tight text-[#0D0D0D] mb-1">Grand Theft Auto III</h3>
+            <p class="font-mono-brutal text-[10px] uppercase tracking-wide text-[#0D0D0D]/70 mb-3">CITY BRAWLER // FIGHT</p>
+            <div class="mt-auto flex items-center justify-between pt-2 border-t-2 border-[#0D0D0D]/15">
+              <div class="flex items-center gap-2">
+                <span class="w-3.5 h-3.5 bg-[#FF5757] border-2 border-[#0D0D0D] inline-block"></span>
+                <span class="font-mono-brutal text-xs font-bold uppercase text-[#0D0D0D]/80">PC</span>
+              </div>
+              <span class="font-mono-brutal text-xs font-bold uppercase bg-[#0D0D0D] text-white px-2 py-0.5 group-hover:bg-[#FF5757] group-hover:text-[#0D0D0D] transition-colors">PLAY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Poster 3 -->
+        <div data-game-id="2" tabindex="0" role="button" aria-label="Play Grand Theft Auto IV"
+          class="game-trigger group brutal-box brutal-card bg-white flex flex-col cursor-pointer pop-in" style="animation-delay:120ms">
+          <div class="p-2.5 pb-0">
+            <div class="aspect-[3/4] w-full border-[3px] border-[#0D0D0D] overflow-hidden bg-[#0D0D0D] relative">
+              <svg class="w-full h-full block transition-transform duration-200 group-hover:scale-[1.04]" viewBox="0 0 300 400" aria-hidden="true"><use href="#art-gta4"/></svg>
+              <span class="absolute top-2 left-2 bg-[#0D0D0D] text-white font-mono-brutal text-[10px] font-bold px-1.5 py-0.5">2008</span>
+              <span class="absolute top-2 right-2 bg-[#FFD026] text-[#0D0D0D] font-mono-brutal text-xs font-bold px-2 py-0.5 border-2 border-[#0D0D0D]">HI: <span id="hi-score-2">0</span></span>
+              <div class="absolute inset-x-0 bottom-0 bg-[#0D0D0D]/85 py-1.5 text-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="font-mono-brutal text-xs font-bold text-[#FFD026]">▶ CLICK TO PLAY</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 flex flex-col flex-1">
+            <h3 class="font-bold text-lg leading-tight text-[#0D0D0D] mb-1">Grand Theft Auto IV</h3>
+            <p class="font-mono-brutal text-[10px] uppercase tracking-wide text-[#0D0D0D]/70 mb-3">ARMORED RUN // HEIST</p>
+            <div class="mt-auto flex items-center justify-between pt-2 border-t-2 border-[#0D0D0D]/15">
+              <div class="flex items-center gap-2">
+                <span class="w-3.5 h-3.5 bg-[#4CC3FF] border-2 border-[#0D0D0D] inline-block"></span>
+                <span class="font-mono-brutal text-xs font-bold uppercase text-[#0D0D0D]/80">PC</span>
+              </div>
+              <span class="font-mono-brutal text-xs font-bold uppercase bg-[#0D0D0D] text-white px-2 py-0.5 group-hover:bg-[#4CC3FF] group-hover:text-[#0D0D0D] transition-colors">PLAY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Poster 4 -->
+        <div data-game-id="3" tabindex="0" role="button" aria-label="Play Grand Theft Auto V"
+          class="game-trigger group brutal-box brutal-card bg-white flex flex-col cursor-pointer pop-in" style="animation-delay:180ms">
+          <div class="p-2.5 pb-0">
+            <div class="aspect-[3/4] w-full border-[3px] border-[#0D0D0D] overflow-hidden bg-[#0D0D0D] relative">
+              <svg class="w-full h-full block transition-transform duration-200 group-hover:scale-[1.04]" viewBox="0 0 300 400" aria-hidden="true"><use href="#art-gta5"/></svg>
+              <img src="posters/gta-v.jpg" alt="Grand Theft Auto V cover poster" loading="lazy"
+                   class="absolute inset-0 w-full h-full object-contain block opacity-0 poster-img transition-transform duration-200 group-hover:scale-[1.04]"
+                   onerror="this.remove()">
+              <span class="absolute top-2 left-2 bg-[#0D0D0D] text-white font-mono-brutal text-[10px] font-bold px-1.5 py-0.5">2013</span>
+              <span class="absolute top-2 right-2 bg-[#FFD026] text-[#0D0D0D] font-mono-brutal text-xs font-bold px-2 py-0.5 border-2 border-[#0D0D0D]">HI: <span id="hi-score-3">0</span></span>
+              <div class="absolute inset-x-0 bottom-0 bg-[#0D0D0D]/85 py-1.5 text-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="font-mono-brutal text-xs font-bold text-[#FFD026]">▶ CLICK TO PLAY</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 flex flex-col flex-1">
+            <h3 class="font-bold text-lg leading-tight text-[#0D0D0D] mb-1">Grand Theft Auto V</h3>
+            <p class="font-mono-brutal text-[10px] uppercase tracking-wide text-[#0D0D0D]/70 mb-3">CHOPPER BLITZ // SHOOT</p>
+            <div class="mt-auto flex items-center justify-between pt-2 border-t-2 border-[#0D0D0D]/15">
+              <div class="flex items-center gap-2">
+                <span class="w-3.5 h-3.5 bg-[#4ADE80] border-2 border-[#0D0D0D] inline-block"></span>
+                <span class="font-mono-brutal text-xs font-bold uppercase text-[#0D0D0D]/80">PC</span>
+              </div>
+              <span class="font-mono-brutal text-xs font-bold uppercase bg-[#0D0D0D] text-white px-2 py-0.5 group-hover:bg-[#4ADE80] group-hover:text-[#0D0D0D] transition-colors">PLAY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Poster 5 -->
+        <div data-game-id="4" tabindex="0" role="button" aria-label="Play Minecraft-style voxel breaker"
+          class="game-trigger group brutal-box brutal-card bg-white flex flex-col cursor-pointer pop-in" style="animation-delay:240ms">
+          <div class="p-2.5 pb-0">
+            <div class="aspect-[3/4] w-full border-[3px] border-[#0D0D0D] overflow-hidden bg-[#0D0D0D] relative">
+              <svg class="w-full h-full block transition-transform duration-200 group-hover:scale-[1.04]" viewBox="0 0 300 400" aria-hidden="true"><use href="#art-mc"/></svg>
+              <img src="posters/minecraft.jpg" alt="Minecraft cover poster" loading="lazy"
+                   class="absolute inset-0 w-full h-full object-contain block opacity-0 poster-img transition-transform duration-200 group-hover:scale-[1.04]"
+                   onerror="this.remove()">
+              <span class="absolute top-2 left-2 bg-[#0D0D0D] text-white font-mono-brutal text-[10px] font-bold px-1.5 py-0.5">2011</span>
+              <span class="absolute top-2 right-2 bg-[#FFD026] text-[#0D0D0D] font-mono-brutal text-xs font-bold px-2 py-0.5 border-2 border-[#0D0D0D]">HI: <span id="hi-score-4">0</span></span>
+              <div class="absolute inset-x-0 bottom-0 bg-[#0D0D0D]/85 py-1.5 text-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="font-mono-brutal text-xs font-bold text-[#FFD026]">▶ CLICK TO PLAY</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 flex flex-col flex-1">
+            <h3 class="font-bold text-lg leading-tight text-[#0D0D0D] mb-1">Minecraft</h3>
+            <p class="font-mono-brutal text-[10px] uppercase tracking-wide text-[#0D0D0D]/70 mb-3">VOXEL BREAKER // BUILD</p>
+            <div class="mt-auto flex items-center justify-between pt-2 border-t-2 border-[#0D0D0D]/15">
+              <div class="flex items-center gap-2">
+                <span class="w-3.5 h-3.5 bg-[#FF7CE5] border-2 border-[#0D0D0D] inline-block"></span>
+                <span class="font-mono-brutal text-xs font-bold uppercase text-[#0D0D0D]/80">PC</span>
+              </div>
+              <span class="font-mono-brutal text-xs font-bold uppercase bg-[#0D0D0D] text-white px-2 py-0.5 group-hover:bg-[#FF7CE5] group-hover:text-[#0D0D0D] transition-colors">PLAY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Poster 6 -->
+        <div data-game-id="5" tabindex="0" role="button" aria-label="Play Grand Theft Auto Vice City"
+          class="game-trigger group brutal-box brutal-card bg-white flex flex-col cursor-pointer pop-in" style="animation-delay:300ms">
+          <div class="p-2.5 pb-0">
+            <div class="aspect-[3/4] w-full border-[3px] border-[#0D0D0D] overflow-hidden bg-[#0D0D0D] relative">
+              <svg class="w-full h-full block transition-transform duration-200 group-hover:scale-[1.04]" viewBox="0 0 300 400" aria-hidden="true"><use href="#art-vice"/></svg>
+              <img src="posters/vice-city.jpg" alt="Grand Theft Auto Vice City cover poster" loading="lazy"
+                   class="absolute inset-0 w-full h-full object-contain block opacity-0 poster-img transition-transform duration-200 group-hover:scale-[1.04]"
+                   onerror="this.remove()">
+              <span class="absolute top-2 left-2 bg-[#0D0D0D] text-white font-mono-brutal text-[10px] font-bold px-1.5 py-0.5">1986</span>
+              <span class="absolute top-2 right-2 bg-[#FFD026] text-[#0D0D0D] font-mono-brutal text-xs font-bold px-2 py-0.5 border-2 border-[#0D0D0D]">HI: <span id="hi-score-5">0</span></span>
+              <div class="absolute inset-x-0 bottom-0 bg-[#0D0D0D]/85 py-1.5 text-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="font-mono-brutal text-xs font-bold text-[#FFD026]">▶ CLICK TO PLAY</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 flex flex-col flex-1">
+            <h3 class="font-bold text-lg leading-tight text-[#0D0D0D] mb-1">Grand Theft Auto: Vice City</h3>
+            <p class="font-mono-brutal text-[10px] uppercase tracking-wide text-[#0D0D0D]/70 mb-3">OCEAN DRIVE RUN // JUMP</p>
+            <div class="mt-auto flex items-center justify-between pt-2 border-t-2 border-[#0D0D0D]/15">
+              <div class="flex items-center gap-2">
+                <span class="w-3.5 h-3.5 bg-[#40C9C0] border-2 border-[#0D0D0D] inline-block"></span>
+                <span class="font-mono-brutal text-xs font-bold uppercase text-[#0D0D0D]/80">PC</span>
+              </div>
+              <span class="font-mono-brutal text-xs font-bold uppercase bg-[#0D0D0D] text-white px-2 py-0.5 group-hover:bg-[#40C9C0] group-hover:text-[#0D0D0D] transition-colors">PLAY</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section aria-label="How it works" class="mb-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div class="bg-[#0D0D0D] text-white px-5 py-2.5 border-4 border-[#0D0D0D] shadow-[5px_5px_0px_#4ADE80]">
+          <h2 class="font-display text-xl sm:text-2xl uppercase tracking-wide">HOW IT WORKS</h2>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="brutal-box bg-white p-5 halftone-bg">
+          <div class="font-display text-5xl text-[#FF5757] mb-2">1</div>
+          <h3 class="font-display text-lg uppercase mb-1.5">PICK A GAME</h3>
+          <p class="font-medium text-sm text-[#0D0D0D]/80 leading-snug">Tap any colored card or poster above. Six fan-made mini games, zero waiting.</p>
+        </div>
+        <div class="brutal-box bg-[#FFD026] p-5 halftone-bg">
+          <div class="font-display text-5xl text-[#0D0D0D] mb-2">2</div>
+          <h3 class="font-display text-lg uppercase mb-1.5">CLICK PLAY</h3>
+          <p class="font-medium text-sm text-[#0D0D0D]/80 leading-snug">The arcade window opens on top of the page. Restart or exit any time.</p>
+        </div>
+        <div class="brutal-box bg-white p-5 halftone-bg">
+          <div class="font-display text-5xl text-[#4CC3FF] mb-2">3</div>
+          <h3 class="font-display text-lg uppercase mb-1.5">STEER &amp; SHOOT</h3>
+          <p class="font-medium text-sm text-[#0D0D0D]/80 leading-snug">Arrows or WASD to move, SPACE to fire. P pauses. On phones, use the touch pad.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t-4 border-[#0D0D0D] bg-white mt-12 py-6">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="font-display text-lg uppercase bg-[#0D0D0D] text-[#FFD026] px-2.5 py-1">PLAY FREE</span>
+        <span class="font-mono-brutal text-xs sm:text-sm font-bold text-[#0D0D0D]">BRUTALIST WEB ARCADE // NO INSTALL</span>
+      </div>
+      <div class="font-mono-brutal text-[10px] sm:text-xs font-bold uppercase text-[#0D0D0D]/60 text-center">
+        FAN-MADE TRIBUTE MINI GAMES // NOT AFFILIATED WITH ROCKSTAR GAMES OR MOJANG
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================================
+       IN-BROWSER PLAYABLE ARCADE MODAL
+  ======================================================================= -->
+  <div id="arcade-modal" class="fixed inset-0 z-50 bg-black/80 hidden items-center justify-center p-3 sm:p-6">
+    <div id="modal-frame" class="brutal-box bg-[#F3EFE6] w-full max-w-4xl overflow-hidden flex flex-col" role="dialog" aria-modal="true" aria-label="Arcade game window">
+
+      <!-- Modal Top Header Bar -->
+      <div id="modal-header-bar" class="bg-[#A78BFA] border-b-4 border-[#0D0D0D] px-4 py-3 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-3 min-w-0">
+          <span id="modal-game-badge" class="font-mono-brutal text-xs font-bold uppercase bg-[#0D0D0D] text-white px-2 py-1 shrink-0">GAME 01</span>
+          <h3 id="modal-game-title" class="font-display text-lg sm:text-2xl uppercase text-[#0D0D0D] truncate">GRAND THEFT AUTO 2</h3>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="restart-game-btn" type="button" class="brutal-btn brutal-box-sm bg-[#FFD026] text-[#0D0D0D] px-3 py-1 font-mono-brutal text-xs font-bold uppercase">↻ RESTART</button>
+          <button id="pause-game-btn" type="button" class="brutal-btn brutal-box-sm bg-white text-[#0D0D0D] px-3 py-1 font-mono-brutal text-xs font-bold uppercase">⏸ PAUSE</button>
+          <button id="close-modal-btn" type="button" class="brutal-btn brutal-box-sm bg-[#FF5757] text-white px-3 py-1 font-mono-brutal text-xs font-bold uppercase">✕ EXIT</button>
+        </div>
+      </div>
+
+      <!-- Score & Controls Bar -->
+      <div class="bg-[#0D0D0D] text-white px-4 py-2 flex flex-wrap items-center justify-between gap-2 font-mono-brutal text-xs sm:text-sm">
+        <div class="flex items-center gap-4">
+          <span>SCORE: <strong id="live-score" class="text-[#FFD026]">0</strong></span>
+          <span>BEST: <strong id="live-best" class="text-[#4ADE80]">0</strong></span>
+          <span id="extra-stat-wrap" class="text-white/90">—</span>
+        </div>
+        <div id="modal-controls-hint" class="text-white/70 text-[10px] sm:text-xs uppercase">CONTROLS: ARROWS / WASD + SPACE</div>
+      </div>
+
+      <!-- Game Canvas Container -->
+      <div class="relative bg-[#111116] w-full flex items-center justify-center overflow-hidden">
+        <canvas id="arcade-canvas" width="680" height="400" class="w-full h-auto block" style="max-height:62vh; aspect-ratio: 17/10; object-fit: contain;"></canvas>
+        <div class="crt-lines absolute inset-0"></div>
+
+        <!-- Pause Overlay -->
+        <div id="pause-overlay" class="hidden absolute inset-0 bg-black/70 flex-col items-center justify-center p-6 text-center">
+          <div class="brutal-box bg-white px-8 py-6">
+            <h4 class="font-display text-3xl uppercase text-[#0D0D0D] mb-2">PAUSED</h4>
+            <p class="font-mono-brutal text-xs font-bold text-[#0D0D0D] uppercase">PRESS P OR THE PAUSE BUTTON TO RESUME</p>
+          </div>
+        </div>
+
+        <!-- Game Over Overlay -->
+        <div id="game-over-overlay" class="hidden absolute inset-0 bg-black/85 flex-col items-center justify-center p-6 text-center z-10">
+          <div class="brutal-box bg-[#FFD026] p-6 max-w-sm w-full">
+            <h4 id="game-over-heading" class="font-display text-3xl uppercase text-[#0D0D0D] mb-2">GAME OVER</h4>
+            <p id="game-over-sub" class="font-mono-brutal text-sm font-bold text-[#0D0D0D] mb-4">FINAL SCORE: 0</p>
+            <div class="flex items-center justify-center gap-3 flex-wrap">
+              <button id="play-again-btn" type="button" class="brutal-btn brutal-box-sm bg-[#4ADE80] text-[#0D0D0D] px-4 py-2 font-mono-brutal text-sm font-bold uppercase">▶ PLAY AGAIN</button>
+              <button id="overlay-exit-btn" type="button" class="brutal-btn brutal-box-sm bg-white text-[#0D0D0D] px-4 py-2 font-mono-brutal text-sm font-bold uppercase">OTHER GAMES</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Touch / On-Screen Brutalist Arcade Controls -->
+      <div class="bg-[#E5DEC9] border-t-4 border-[#0D0D0D] p-3 flex items-center justify-between gap-2 select-none">
+        <div class="flex items-center gap-2">
+          <button type="button" data-key="L" class="touch-ctrl brutal-btn brutal-box-sm bg-white text-[#0D0D0D] w-12 h-10 font-mono-brutal font-bold text-lg flex items-center justify-center active:bg-[#FFD026]" aria-label="Move left">◀</button>
+          <button type="button" data-key="R" class="touch-ctrl brutal-btn brutal-box-sm bg-white text-[#0D0D0D] w-12 h-10 font-mono-brutal font-bold text-lg flex items-center justify-center active:bg-[#FFD026]" aria-label="Move right">▶</button>
+          <button type="button" data-key="U" class="touch-ctrl brutal-btn brutal-box-sm bg-white text-[#0D0D0D] w-12 h-10 font-mono-brutal font-bold text-lg flex items-center justify-center active:bg-[#FFD026]" aria-label="Move up / jump">▲</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" data-key="F" class="touch-ctrl brutal-btn brutal-box-sm bg-[#FF5757] text-white px-5 h-10 font-mono-brutal font-bold text-xs sm:text-sm uppercase tracking-wider active:bg-[#FFD026] active:text-black">FIRE / ACTION (SPACE)</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- All arcade/game logic lives in games.js -->
+  <script src="games.js"></script>
+</body>
+</html>
