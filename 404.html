@@ -9,6 +9,16 @@
   <meta name="description" content="404: The arcade machine or page you are looking for has been unplugged, moved, or never existed. Return to the ARCADE floor.">
   <meta name="theme-color" content="#f2eddf">
   <link rel="canonical" href="https://arcade.run.place/404.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ARCADE">
+  <meta property="og:title" content="404 — Cabinet Not Found — ARCADE">
+  <meta property="og:description" content="404: The arcade machine or page you are looking for has been unplugged, moved, or never existed. Return to the ARCADE floor.">
+  <meta property="og:url" content="https://arcade.run.place/404.html">
+  <meta property="og:image" content="https://arcade.run.place/assets/covers/hero-arcade.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="404 — Cabinet Not Found — ARCADE">
+  <meta name="twitter:description" content="404: The arcade machine or page you are looking for has been unplugged, moved, or never existed. Return to the ARCADE floor.">
+  <meta name="twitter:image" content="https://arcade.run.place/assets/covers/hero-arcade.jpg">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230b0b0b'/%3E%3Crect x='6' y='6' width='52' height='52' fill='%23d8ff3e'/%3E%3Ctext x='32' y='44' font-size='28' font-family='Arial Black,Arial' font-weight='900' text-anchor='middle' fill='%230b0b0b'%3EA%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,30 +45,44 @@
       </span>
     </a>
     <nav class="main-nav" aria-label="Collections">
-      <a href="collection.html?c=all" data-nav="all" class="nav-all"><span>ALL</span>Explore</a>
       <a href="collection.html?c=open" data-nav="open"><span>01</span>Open Worlds</a>
       <a href="collection.html?c=versus" data-nav="versus"><span>02</span>Versus</a>
       <a href="collection.html?c=shooters" data-nav="shooters"><span>03</span>Firefight</a>
       <a href="collection.html?c=sports" data-nav="sports"><span>04</span>Speed &amp; Sport</a>
       <a href="collection.html?c=vault" data-nav="vault"><span>05</span>The Vault</a>
+      <a href="collection.html?c=all" data-nav="all" class="nav-all"><span>ALL</span>Explore</a>
     </nav>
-    <div class="header-actions">
-      <button class="search-btn" id="search-open" type="button" aria-label="Search all games">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <span class="search-label">SEARCH</span>
-        <kbd>CTRL K</kbd>
+    <div class="header-tools">
+      <button class="search-btn" type="button" data-open-search aria-label="Search games">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="search-label">Search</span>
+        <span class="kbd">Ctrl K</span>
       </button>
-      <a class="shelf-link" id="shelf-btn" href="#shelf" aria-label="Open saved shelf">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20s-7-4.4-7-9a4 4 0 017-2.6A4 4 0 0119 11c0 4.6-7 9-7 9z"/></svg>
-        <span class="label">SHELF</span>
-        <span class="count" id="shelf-count">0</span>
+      <a class="shelf-link" href="collection.html?fav=1" aria-label="My shelf">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20s-7-4.4-7-9a4 4 0 017-2.6A4 4 0 0119 11c0 4.6-7 9-7 9z"/></svg>
+        <span class="label">Shelf</span>
+        <span class="count" data-fav-count>0</span>
       </a>
-      <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation">
+      <button class="icon-btn menu-toggle" type="button" data-menu-toggle aria-label="Menu" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
     </div>
   </div>
 </header>
+
+<div class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav-head"><span>INDEX / 2026</span><span>ARCADE</span></div>
+  <a href="index.html">Home <span>01</span></a>
+  <a href="collection.html?c=all">Explore All Games <span>★</span></a>
+  <a href="collection.html?c=open">Open Worlds <span>02</span></a>
+  <a href="collection.html?c=versus">Versus <span>03</span></a>
+  <a href="collection.html?c=shooters">Firefight <span>04</span></a>
+  <a href="collection.html?c=sports">Speed &amp; Sport <span>05</span></a>
+  <a href="collection.html?c=vault">The Vault <span>06</span></a>
+  <a href="collection.html?fav=1">My Shelf <span>07</span></a>
+  <a href="info.html?p=about">About <span>08</span></a>
+  <a href="classic.html">Retro Room <span>09</span></a>
+</div>
 
 <main id="main">
   <section class="page-head" style="--sys:var(--acid);--sys-ink:#0b0b0b;padding:70px 0 90px;">
@@ -114,6 +138,25 @@
     </div>
   </div>
 </footer>
+
+<!-- search overlay -->
+<div class="search-overlay" id="search-overlay" role="dialog" aria-modal="true" aria-label="Search games">
+  <div class="search-panel">
+    <div class="search-input-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="search-input" type="text" placeholder="Search 47 games…" autocomplete="off" spellcheck="false" aria-label="Search games">
+      <button class="kbd search-esc" type="button" data-close-search aria-label="Close search">ESC</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+    <div class="search-foot">
+      <span><span class="kbd">↑</span><span class="kbd">↓</span> Navigate</span>
+      <span><span class="kbd">↵</span> Open</span>
+      <span><span class="kbd">ESC</span> Close</span>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="js/data.js"></script>
 <script src="js/covers.js"></script>
