@@ -1,5 +1,5 @@
-/* ==========================================================================
-   CABINET — site application
+﻿/* ==========================================================================
+   CABINET â€” site application
    ========================================================================== */
 (function () {
   'use strict';
@@ -95,7 +95,7 @@
           '<div class="cover-ui">' +
             '<div class="cover-top"><span class="cover-chip">' + esc(c.label) + '</span>' + favButton(g) + '</div>' +
             '<div class="cover-bottom">' +
-              '<div class="cover-collection">' + esc(c.name) + ' · ' + esc(g.genre) + '</div>' +
+              '<div class="cover-collection">' + esc(c.name) + ' Â· ' + esc(g.genre) + '</div>' +
               '<div class="cover-title">' + esc(g.title) + '</div>' +
             '</div>' +
           '</div>' +
@@ -104,7 +104,7 @@
         '</div>' +
         '<div class="card-meta">' +
           '<span class="genre">' + esc(g.genre) + '</span>' +
-          '<span class="card-play-hint" title="' + esc(g.url) + '">Play link ↗</span>' +
+          '<span class="card-play-hint" title="' + esc(g.url) + '">Play link â†—</span>' +
         '</div>' +
       '</div>' +
     '</article>';
@@ -232,7 +232,7 @@
           arrowSvg.replace('<svg', '<svg class="s-arrow"') + '</a>';
       });
     } else if (!items.length) {
-      html += '<div class="search-empty">No games match “' + esc(query) + '”.<br>Try “racing”, “puzzle” or a collection name.</div>';
+      html += '<div class="search-empty">No games match â€œ' + esc(query) + 'â€.<br>Try â€œracingâ€, â€œpuzzleâ€ or a collection name.</div>';
     } else {
       html += '<div class="search-group-label">' + items.length + ' result' + (items.length === 1 ? '' : 's') + '</div>';
       items.forEach(function (item, i) {
@@ -430,7 +430,7 @@
       crumb = '<a href="index.html">Home</a> / My shelf';
     } else if (state.query) {
       title = 'Search <em>results.</em>'; eyebrow = 'Query: ' + esc(state.query); color = 'var(--acid)'; inkColor = '#0b0b0b';
-      lede = 'Showing games matching “' + esc(state.query) + '”.';
+      lede = 'Showing games matching â€œ' + esc(state.query) + 'â€.';
       crumb = '<a href="index.html">Home</a> / Search';
     } else if (c) {
       var collectionTitles = {
@@ -452,7 +452,7 @@
       crumb = '<a href="index.html">Home</a> / All games';
     }
 
-    document.title = (state.mode === 'fav' ? 'My shelf' : state.query ? 'Search' : c ? c.name : 'All games') + ' — CABINET';
+    document.title = (state.mode === 'fav' ? 'My shelf' : state.query ? 'Search' : c ? c.name : 'All games') + ' â€” CABINET';
     $('meta[name="description"]').setAttribute('content', (c ? c.long : lede).slice(0, 155));
 
     root.innerHTML =
@@ -471,7 +471,7 @@
           '<label class="sr-only" for="sort-select">Sort games</label>' +
           '<select class="select" id="sort-select">' +
             '<option value="featured">Featured</option>' +
-            '<option value="az">A–Z</option>' +
+            '<option value="az">Aâ€“Z</option>' +
             '<option value="index">Catalogue no.</option>' +
           '</select>' +
         '</div>' +
@@ -544,16 +544,16 @@
     var slug = params.get('g');
     var g = D.game(slug);
     if (!g) {
-      root.innerHTML = '<section class="info-page"><div class="wrap"><div class="empty-state"><h3>Game not found.</h3><p>That cabinet is empty. Pick another game from the floor.</p><a class="btn" href="index.html">Back to the arcade</a></div></div></section>';
+      root.innerHTML = '<section class="info-page"><div class="wrap"><div class="empty-state"><h3>Game not found.</h3><p>That FREE PLAY is empty. Pick another game from the floor.</p><a class="btn" href="index.html">Back to the arcade</a></div></div></section>';
       return;
     }
     var c = D.collection(g.collection);
     var host = hostOf(g.url);
     var total = D.games.length;
     var number = String(g.index).padStart(2, '0');
-    document.title = g.title + ' — Play — CABINET';
+    document.title = g.title + ' â€” Play â€” CABINET';
     var meta = $('meta[name="description"]');
-    if (meta) meta.setAttribute('content', 'Play ' + g.title + ', a ' + g.genre + ' game in the ' + c.name + ' collection. Play opens ' + host + ' in this tab. CABINET does not host the game.');
+    if (meta) meta.setAttribute('content', 'Play ' + g.title + ', a ' + g.genre + ' game in the ' + c.name + ' collection. Play opens ' + host + ' in this tab. FREE PLAY does not host the game.');
 
     var related = D.games.filter(function (x) { return x.collection === g.collection && x.slug !== g.slug; });
     if (related.length < 3) {
@@ -570,7 +570,7 @@
           '<div class="game-titleblock">' +
             '<span class="eyebrow">' + esc(c.label) + ' / ' + esc(g.genre) + ' / LINK ' + number + '</span>' +
             '<h1>' + esc(g.title) + '</h1>' +
-            '<p class="tagline">' + esc(c.name) + ' · ' + esc(g.genre) + ' · External play link</p>' +
+            '<p class="tagline">' + esc(c.name) + ' Â· ' + esc(g.genre) + ' Â· External play link</p>' +
           '</div>' +
           '<div class="game-head-actions">' +
             '<button class="btn btn--ghost btn--sm" type="button" data-fav="' + g.slug + '" aria-pressed="' + (isFav(g.slug) ? 'true' : 'false') + '">' +
@@ -590,7 +590,7 @@
                   '<h2 class="play-word">Play</h2>' +
                   '<p class="play-game-name">' + esc(g.title) + '</p>' +
                   '<a class="play-big play-big--xl" href="' + esc(g.url) + '" data-play-link>' + playSvg + ' Play ' + esc(g.title) + '</a>' +
-                  '<span class="hint">Opens ' + esc(host) + ' in this tab · not hosted by CABINET</span>' +
+                  '<span class="hint">Opens ' + esc(host) + ' in this tab Â· not hosted by FREE PLAY</span>' +
                 '</div>' +
               '</div>' +
               '<div class="stage-foot">' +
@@ -604,7 +604,7 @@
             '</div>' +
             '<div class="play-notice">' +
               '<span class="play-notice-mark" aria-hidden="true">!</span>' +
-              '<p><strong>You are leaving CABINET.</strong> Play opens <b>' + esc(host) + '</b> in this tab. The game, its downloads, ads and account prompts are controlled by that site, not by us. The back button brings you straight back here.</p>' +
+              '<p><strong>You are leaving FREE PLAY.</strong> Play opens <b>' + esc(host) + '</b> in this tab. The game, its downloads, ads and account prompts are controlled by that site, not by us. The back button brings you straight back here.</p>' +
             '</div>' +
           '</div>' +
 
@@ -622,7 +622,7 @@
             '</div>' +
             '<div class="info-card external-card">' +
               '<h3>Off-site note</h3>' +
-              '<p>' + esc(g.title) + ' is not hosted by CABINET. The Play button opens its external host, where that site’s own terms and privacy policy apply.</p>' +
+              '<p>' + esc(g.title) + ' is not hosted by FREE PLAY. The Play button opens its external host, where that siteâ€™s own terms and privacy policy apply.</p>' +
               '<a class="text-link" href="' + esc(g.url) + '" data-play-link>Play now ' + arrowSvg + '</a>' +
             '</div>' +
           '</aside>' +
@@ -632,16 +632,16 @@
           '<div>' +
             '<div class="prose-block">' +
               '<h2>About this cabinet</h2>' +
-              '<p><strong>' + esc(g.title) + '</strong> is filed in the <strong>' + esc(c.name) + '</strong> collection under <strong>' + esc(g.genre) + '</strong>. It is one of ' + total + ' games on the CABINET floor, and its page exists for one job: to get you to the right external play link without sending you through the wrong door.</p>' +
-              '<p>Press Play and this tab goes directly to <strong>' + esc(host) + '</strong>. CABINET does not wrap the game in a player, host a copy or claim the game as its own. The game, its controls and any downloads live on the external site.</p>' +
+              '<p><strong>' + esc(g.title) + '</strong> is filed in the <strong>' + esc(c.name) + '</strong> collection under <strong>' + esc(g.genre) + '</strong>. It is one of ' + total + ' games on the FREE PLAY floor, and its page exists for one job: to get you to the right external play link without sending you through the wrong door.</p>' +
+              '<p>Press Play and this tab goes directly to <strong>' + esc(host) + '</strong>. FREE PLAY does not wrap the game in a player, host a copy or claim the game as its own. The game, its controls and any downloads live on the external site.</p>' +
             '</div>' +
             '<div class="prose-block">' +
               '<h2>Before you press Play</h2>' +
               '<ul class="plain-list">' +
-                '<li>The Play button opens an external website in this tab. Use your browser’s back button to return to this cabinet.</li>' +
+                '<li>The Play button opens an external website in this tab. Use your browserâ€™s back button to return to this FREE PLAY.</li>' +
                 '<li>Third-party hosts may show ads or pop-ups, ask you to create an account, or limit access by region.</li>' +
                 '<li>Any download, purchase or account you agree to there is between you and that site. Check its terms before you continue.</li>' +
-                '<li>CABINET has no control over the game’s availability. If the link is dead, tell us and we will review it.</li>' +
+                '<li>FREE PLAY has no control over the gameâ€™s availability. If the link is dead, tell us and we will review it.</li>' +
               '</ul>' +
             '</div>' +
             '<div class="prose-block">' +
@@ -697,23 +697,23 @@
       label: 'About',
       title: '47 games. <em>One click</em> <span class="nowrap">from play.</span>',
       body:
-        '<p>CABINET is a browser arcade index: 47 games, five collections and one job — get you from the shelf to the game with as little friction as possible.</p>' +
-        '<p>Every cabinet has its own page. That page tells you what you are looking at, names the external host, and gives you a big Play button. Press it and you go directly to the matching game on its own play page, in this tab. No install, no account, no emulator setup on our side.</p>' +
+        '<p>FREE PLAY is a browser arcade index: 47 games, five collections and one job â€” get you from the shelf to the game with as little friction as possible.</p>' +
+        '<p>Every FREE PLAY has its own page. That page tells you what you are looking at, names the external host, and gives you a big Play button. Press it and you go directly to the matching game on its own play page, in this tab. No install, no account, no emulator setup on our side.</p>' +
         '<h2>How the floor is organised</h2>' +
         '<ul>' +
-        '<li><strong>Open Worlds</strong> — big maps, long roads and room to wander.</li>' +
-        '<li><strong>Versus</strong> — wrestling, fighting and party games for two sides and one winner.</li>' +
-        '<li><strong>Firefight</strong> — shooters from the tactical to the completely unhinged.</li>' +
-        '<li><strong>Speed &amp; Sport</strong> — racing, football, cricket and last-minute comebacks.</li>' +
-        '<li><strong>The Vault</strong> — horror, rhythm, puzzle, RPG and browser curiosities that fit nowhere else.</li>' +
+        '<li><strong>Open Worlds</strong> â€” big maps, long roads and room to wander.</li>' +
+        '<li><strong>Versus</strong> â€” wrestling, fighting and party games for two sides and one winner.</li>' +
+        '<li><strong>Firefight</strong> â€” shooters from the tactical to the completely unhinged.</li>' +
+        '<li><strong>Speed &amp; Sport</strong> â€” racing, football, cricket and last-minute comebacks.</li>' +
+        '<li><strong>The Vault</strong> â€” horror, rhythm, puzzle, RPG and browser curiosities that fit nowhere else.</li>' +
         '</ul>' +
-        '<h2>What CABINET is — and is not</h2>' +
-        '<p>CABINET does not host game files, ROMs, ISOs or emulators, and does not claim ownership of any game. The catalogue links to third-party sites that provide the playable versions. Game names, logos and trademarks belong to their respective owners. CABINET is independent and is not affiliated with, endorsed by or sponsored by any publisher, platform holder, storefront or external host.</p>' +
+        '<h2>What FREE PLAY is â€” and is not</h2>' +
+        '<p>FREE PLAY does not host game files, ROMs, ISOs or emulators, and does not claim ownership of any game. The catalogue links to third-party sites that provide the playable versions. Game names, logos and trademarks belong to their respective owners. FREE PLAY is independent and is not affiliated with, endorsed by or sponsored by any publisher, platform holder, storefront or external host.</p>' +
         '<h2>What we made</h2>' +
-        '<p>The site design, front-end code and every typographic poster are original to CABINET. The posters are generated as SVG from each game’s catalogue number, collection palette and a geometric motif; they do not reproduce box art, screenshots or publisher imagery. The single real photograph — the Tokyo arcade on the homepage — is openly licensed and credited in full on the <a href="info.html?p=copyright">copyright page</a>.</p>' +
+        '<p>The site design, front-end code and every typographic poster are original to FREE PLAY. The posters are generated as SVG from each gameâ€™s catalogue number, collection palette and a geometric motif; they do not reproduce box art, screenshots or publisher imagery. The single real photograph â€” the Tokyo arcade on the homepage â€” is openly licensed and credited in full on the <a href="info.html?p=copyright">copyright page</a>.</p>' +
         '<h2>How it is built</h2>' +
         '<ul>' +
-        '<li>Plain HTML, CSS and JavaScript — no framework, no build step.</li>' +
+        '<li>Plain HTML, CSS and JavaScript â€” no framework, no build step.</li>' +
         '<li>Original SVG poster art generated in code for all 47 links.</li>' +
         '<li>Favourites and recent games saved in localStorage; no account and no backend.</li>' +
         '<li>No ads, no analytics and no tracking scripts on CABINET itself.</li>' +
@@ -727,31 +727,31 @@
       label: 'Contact',
       title: 'Report a <em>dead link.</em>',
       body:
-        '<p>CABINET is a small index with one important maintenance job: making sure each of the 47 Play buttons lands on the right game. If something is broken, wrong or missing, we want to hear about it.</p>' +
+        '<p>FREE PLAY is a small index with one important maintenance job: making sure each of the 47 Play buttons lands on the right game. If something is broken, wrong or missing, we want to hear about it.</p>' +
         '<h2>Email</h2>' +
         '<p><a href="mailto:hello@cabinetarcade.com">hello@cabinetarcade.com</a></p>' +
         '<h2>What to include</h2>' +
         '<ul>' +
-        '<li>The game title and its collection, for example “Burnout 3: Takedown / Speed &amp; Sport”.</li>' +
+        '<li>The game title and its collection, for example â€œBurnout 3: Takedown / Speed &amp; Sportâ€.</li>' +
         '<li>The link you landed on, or the page where the problem happened.</li>' +
         '<li>What went wrong: wrong game, dead host, endless redirect, unexpected download prompt, or something else.</li>' +
         '<li>Your browser and device, if the problem looks layout-related.</li>' +
         '<li>A screenshot, if you have one. It is the fastest way to show a mismatch.</li>' +
         '</ul>' +
         '<h2>Copyright and removal requests</h2>' +
-        '<p>CABINET does not host the games. If you are a rights holder and want a link removed, email with the subject “Copyright” and include the exact CABINET page, the game and link concerned, and a statement that you are authorised to act for the rights holder. We review these promptly and will remove or amend the link where appropriate. The <a href="info.html?p=copyright">copyright page</a> has the full process.</p>' +
+        '<p>FREE PLAY does not host the games. If you are a rights holder and want a link removed, email with the subject â€œCopyrightâ€ and include the exact CABINET page, the game and link concerned, and a statement that you are authorised to act for the rights holder. We review these promptly and will remove or amend the link where appropriate. The <a href="info.html?p=copyright">copyright page</a> has the full process.</p>' +
         '<h2>Game support</h2>' +
         '<p>We cannot fix saves, controls, accounts or performance inside an external game. Those belong to the site hosting it. We can remove or replace the signpost if the destination is no longer right.</p>' +
-        '<div class="info-card-callout"><p>We are a tiny project, not a support desk. Replies can take a little while — but reports of mismatched or dead links go to the top of the pile.</p></div>'
+        '<div class="info-card-callout"><p>We are a tiny project, not a support desk. Replies can take a little while â€” but reports of mismatched or dead links go to the top of the pile.</p></div>'
     },
     copyright: {
       label: 'Copyright',
       title: 'Copyright, credits &amp; <em>disclaimers.</em>',
       body:
-        '<p>CABINET is an independent, non-commercial index of external browser game links. This page explains what we own, what we do not own, and how to report a problem.</p>' +
+        '<p>FREE PLAY is an independent, non-commercial index of external browser game links. This page explains what we own, what we do not own, and how to report a problem.</p>' +
         '<h2>Game titles and game content</h2>' +
         '<ul>' +
-        '<li><strong>No game files:</strong> CABINET does not host, copy, emulate or distribute game files, ROMs, ISOs, executables or in-game artwork. Each Play button links to a third-party site that provides the playable version.</li>' +
+        '<li><strong>No game files:</strong> FREE PLAY does not host, copy, emulate or distribute game files, ROMs, ISOs, executables or in-game artwork. Each Play button links to a third-party site that provides the playable version.</li>' +
         '<li><strong>Trademarks:</strong> All game names, logos and trademarks are the property of their respective owners. They are used here in a descriptive way, to identify the game being linked to. No affiliation, endorsement, sponsorship or ownership is claimed.</li>' +
         '<li><strong>External hosts:</strong> We do not control third-party content, availability, advertising, downloads, account prompts, terms or privacy practices. A listing is not an endorsement of the host.</li>' +
         '</ul>' +
@@ -765,28 +765,28 @@
         '<h2>Photography credit</h2>' +
         '<p>Thank you to the photographer who made their work available. The image is cropped and resized for layout; no other alterations are made.</p>' +
         '<ul class="credit-list">' +
-          '<li><strong>Homepage hero</strong> — “Video games arcade center in Tokyo” by Sergiy Galyonkin, <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC BY-SA 2.0</a>. <a href="https://www.flickr.com/photo.gne?id=53416317573" target="_blank" rel="noopener">Source on Flickr</a>.</li>' +
+          '<li><strong>Homepage hero</strong> â€” â€œVideo games arcade center in Tokyoâ€ by Sergiy Galyonkin, <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC BY-SA 2.0</a>. <a href="https://www.flickr.com/photo.gne?id=53416317573" target="_blank" rel="noopener">Source on Flickr</a>.</li>' +
         '</ul>' +
         '<p class="credit-note">The CC BY-SA 2.0 image remains under the same licence as the original. The cropped version used here is shared under CC BY-SA 2.0. Attribution does not imply endorsement by the photographer.</p>' +
         '<h2>External links and third-party material</h2>' +
-        '<p>Play buttons navigate to websites we do not own or operate. Those sites are responsible for their own content, game files, advertising and compliance. CABINET has no ability to remove material from them. If a linked site infringes your rights, contact that host as well as notifying us so the listing can be reviewed.</p>' +
+        '<p>Play buttons navigate to websites we do not own or operate. Those sites are responsible for their own content, game files, advertising and compliance. FREE PLAY has no ability to remove material from them. If a linked site infringes your rights, contact that host as well as notifying us so the listing can be reviewed.</p>' +
         '<h2>Reporting a problem or takedown request</h2>' +
-        '<p>If you are a rights holder and believe a link or any material on CABINET infringes your rights, email <a href="mailto:hello@cabinetarcade.com">hello@cabinetarcade.com</a> with the subject “Copyright” and include:</p>' +
+        '<p>If you are a rights holder and believe a link or any material on CABINET infringes your rights, email <a href="mailto:hello@cabinetarcade.com">hello@cabinetarcade.com</a> with the subject â€œCopyrightâ€ and include:</p>' +
         '<ul>' +
         '<li>Your name and contact details.</li>' +
-        '<li>The exact CABINET URL and the game or link concerned.</li>' +
+        '<li>The exact FREE PLAY URL and the game or link concerned.</li>' +
         '<li>The work you believe is infringed and why.</li>' +
         '<li>A statement that you are authorised to act for the rights holder.</li>' +
         '</ul>' +
-        '<p>We review valid requests promptly and will remove or amend a listing where appropriate. Because CABINET does not host game files, removal of the underlying game must be requested from its external host.</p>' +
+        '<p>We review valid requests promptly and will remove or amend a listing where appropriate. Because FREE PLAY does not host game files, removal of the underlying game must be requested from its external host.</p>' +
         '<h2>Using the site</h2>' +
-        '<p>You are welcome to play, link to CABINET and share screenshots. Please do not republish the site design, code or poster system as your own product, and do not sell access to them. For licensing questions, get in touch.</p>'
+        '<p>You are welcome to play, link to FREE PLAY and share screenshots. Please do not republish the site design, code or poster system as your own product, and do not sell access to them. For licensing questions, get in touch.</p>'
     },
     privacy: {
       label: 'Privacy',
       title: 'Your data stays <em>yours.</em>',
       body:
-        '<p>CABINET is a static site with no accounts, no analytics, no advertising and no backend collecting play data.</p>' +
+        '<p>FREE PLAY is a static site with no accounts, no analytics, no advertising and no backend collecting play data.</p>' +
         '<h2>What is stored in your browser</h2>' +
         '<p>A small amount of information is kept in localStorage so the site works the way you expect:</p>' +
         '<ul>' +
@@ -795,19 +795,19 @@
         '</ul>' +
         '<p>None of this is transmitted anywhere. Clearing site data in your browser removes all of it.</p>' +
         '<h2>When you press Play</h2>' +
-        '<p>Play opens a third-party game site in this tab. That site may set cookies, use analytics, show advertising, request an account or collect other data under its own privacy policy. CABINET does not receive or control that data. Please review the privacy policy of the site you land on before sharing information with it.</p>' +
+        '<p>Play opens a third-party game site in this tab. That site may set cookies, use analytics, show advertising, request an account or collect other data under its own privacy policy. FREE PLAY does not receive or control that data. Please review the privacy policy of the site you land on before sharing information with it.</p>' +
         '<h2>Fonts</h2>' +
-        '<p>Fonts are loaded from Google Fonts, which means Google receives the request for the font files, including your IP address. If you prefer, block third-party fonts — the site falls back to local system fonts and still works.</p>' +
+        '<p>Fonts are loaded from Google Fonts, which means Google receives the request for the font files, including your IP address. If you prefer, block third-party fonts â€” the site falls back to local system fonts and still works.</p>' +
         '<h2>Cookies</h2>' +
-        '<p>CABINET sets no cookies of its own and does not track you across sites. External sites opened through a Play link may set their own.</p>'
+        '<p>FREE PLAY sets no cookies of its own and does not track you across sites. External sites opened through a Play link may set their own.</p>'
     },
     terms: {
       label: 'Terms',
       title: 'The <em>fine print.</em>',
       body:
-        '<p>By using CABINET, you agree to the following plain-language terms.</p>' +
+        '<p>By using FREE PLAY, you agree to the following plain-language terms.</p>' +
         '<h2>The service</h2>' +
-        '<p>CABINET is a free index of external game links. We do not host the games. The site is provided “as is”; links can change, break, be geo-blocked or be removed without notice.</p>' +
+        '<p>FREE PLAY is a free index of external game links. We do not host the games. The site is provided â€œas isâ€; links can change, break, be geo-blocked or be removed without notice.</p>' +
         '<h2>External sites</h2>' +
         '<ul>' +
         '<li>Play buttons open third-party websites in the same tab. Their terms, privacy policies and end-user licence agreements apply to you.</li>' +
@@ -817,21 +817,21 @@
         '</ul>' +
         '<h2>Acceptable use</h2>' +
         '<ul>' +
-        '<li>Do not attempt to disrupt the site or other visitors’ access to it.</li>' +
+        '<li>Do not attempt to disrupt the site or other visitorsâ€™ access to it.</li>' +
         '<li>Do not scrape at a volume that harms the service, or use it for unlawful activity.</li>' +
         '<li>Do not republish the site design, code or poster system as a commercial product.</li>' +
         '<li>Do not misrepresent CABINET as affiliated with or endorsed by any game publisher or external host.</li>' +
         '</ul>' +
         '<h2>Intellectual property</h2>' +
-        '<p>Game names, logos and trademarks belong to their respective owners. CABINET does not host game files and claims no ownership of them. The site design, code and original typographic posters belong to CABINET; see the <a href="info.html?p=copyright">copyright page</a> for details.</p>' +
+        '<p>Game names, logos and trademarks belong to their respective owners. FREE PLAY does not host game files and claims no ownership of them. The site design, code and original typographic posters belong to CABINET; see the <a href="info.html?p=copyright">copyright page</a> for details.</p>' +
         '<h2>Privacy</h2>' +
         '<p>Favourites and recent games stay in your browser. The <a href="info.html?p=privacy">privacy page</a> explains what is stored and what happens when you follow an external link.</p>' +
         '<h2>Liability</h2>' +
-        '<p>To the extent permitted by law, CABINET is not liable for indirect or consequential loss arising from use of the site or any external site it links to. Nothing in these terms excludes rights that cannot legally be excluded.</p>' +
+        '<p>To the extent permitted by law, FREE PLAY is not liable for indirect or consequential loss arising from use of the site or any external site it links to. Nothing in these terms excludes rights that cannot legally be excluded.</p>' +
         '<h2>Changes</h2>' +
         '<p>These terms may be updated as the project evolves. The current version is always published on this page.</p>' +
         '<h2>Non-affiliation</h2>' +
-        '<p>CABINET is an independent project and is not affiliated with, endorsed by or sponsored by any game publisher, platform holder, storefront or external host. All game titles and trademarks remain with their owners.</p>'
+        '<p>FREE PLAY is an independent project and is not affiliated with, endorsed by or sponsored by any game publisher, platform holder, storefront or external host. All game titles and trademarks remain with their owners.</p>'
     }
   };
 
@@ -841,7 +841,7 @@
     var params = new URLSearchParams(location.search);
     var key = params.get('p') || 'about';
     var data = INFO[key] || INFO.about;
-    document.title = data.label + ' — CABINET';
+    document.title = data.label + ' â€” CABINET';
     root.innerHTML =
       '<div class="wrap info-layout">' +
         '<nav class="info-nav" aria-label="Information pages">' +
@@ -891,3 +891,4 @@
     toast: toast
   };
 }());
+

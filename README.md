@@ -1,4 +1,4 @@
-# CABINET — Browser Arcade
+# FREE PLAY — Browser Arcade
 
 > **47 browser games across five collections. One click to play.**
 
