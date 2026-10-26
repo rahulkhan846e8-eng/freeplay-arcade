@@ -719,7 +719,7 @@
         '<li>Plain HTML, CSS and JavaScript â€” no framework, no build step.</li>' +
         '<li>Original SVG poster art generated in code for all 47 links.</li>' +
         '<li>Favourites and recent games saved in localStorage; no account and no backend.</li>' +
-        '<li>No ads, no analytics and no tracking scripts on CABINET itself.</li>' +
+        '<li>No ads, no analytics and no tracking scripts on ARCADE itself.</li>' +
         '<li>Anton, Space Grotesk and JetBrains Mono served by Google Fonts.</li>' +
         '</ul>' +
         '<div class="info-card-callout"><p><strong>External links.</strong> Play opens a third-party site. Its terms, privacy policy, ads and availability are outside our control. A link is a signpost, not an endorsement. See the <a href="info.html?p=terms">terms</a> and <a href="info.html?p=privacy">privacy</a> pages for the plain-language version.</p></div>' +
@@ -732,7 +732,7 @@
       body:
         '<p>ARCADE is a small index with one important maintenance job: making sure each of the 47 Play buttons lands on the right game. If something is broken, wrong or missing, we want to hear about it.</p>' +
         '<h2>Email</h2>' +
-        '<p><a href="mailto:hello@cabinetarcade.com">hello@cabinetarcade.com</a></p>' +
+        '<p><a href="mailto:hello@arcade.run.place">hello@arcade.run.place</a></p>' +
         '<h2>What to include</h2>' +
         '<ul>' +
         '<li>The game title and its collection, for example â€œBurnout 3: Takedown / Speed &amp; Sportâ€.</li>' +
@@ -742,7 +742,7 @@
         '<li>A screenshot, if you have one. It is the fastest way to show a mismatch.</li>' +
         '</ul>' +
         '<h2>Copyright and removal requests</h2>' +
-        '<p>ARCADE does not host the games. If you are a rights holder and want a link removed, email with the subject â€œCopyrightâ€ and include the exact CABINET page, the game and link concerned, and a statement that you are authorised to act for the rights holder. We review these promptly and will remove or amend the link where appropriate. The <a href="info.html?p=copyright">copyright page</a> has the full process.</p>' +
+        '<p>ARCADE does not host the games. If you are a rights holder and want a link removed, email with the subject â€œCopyrightâ€ and include the exact ARCADE page, the game and link concerned, and a statement that you are authorised to act for the rights holder. We review these promptly and will remove or amend the link where appropriate. The <a href="info.html?p=copyright">copyright page</a> has the full process.</p>' +
         '<h2>Game support</h2>' +
         '<p>We cannot fix saves, controls, accounts or performance inside an external game. Those belong to the site hosting it. We can remove or replace the signpost if the destination is no longer right.</p>' +
         '<div class="info-card-callout"><p>We are a tiny project, not a support desk. Replies can take a little while â€” but reports of mismatched or dead links go to the top of the pile.</p></div>'
@@ -758,7 +758,7 @@
         '<li><strong>Trademarks:</strong> All game names, logos and trademarks are the property of their respective owners. They are used here in a descriptive way, to identify the game being linked to. No affiliation, endorsement, sponsorship or ownership is claimed.</li>' +
         '<li><strong>External hosts:</strong> We do not control third-party content, availability, advertising, downloads, account prompts, terms or privacy practices. A listing is not an endorsement of the host.</li>' +
         '</ul>' +
-        '<h2>What CABINET owns</h2>' +
+        '<h2>What ARCADE owns</h2>' +
         '<ul>' +
         '<li><strong>Site design and code:</strong> the layout, styles, interaction design and JavaScript are original work created for this project.</li>' +
         '<li><strong>Typographic posters:</strong> all 47 covers are original SVG artwork generated in code from catalogue numbers, collection palettes and geometric motifs. They do not reproduce box art, screenshots or publisher illustrations.</li>' +
@@ -774,7 +774,7 @@
         '<h2>External links and third-party material</h2>' +
         '<p>Play buttons navigate to websites we do not own or operate. Those sites are responsible for their own content, game files, advertising and compliance. ARCADE has no ability to remove material from them. If a linked site infringes your rights, contact that host as well as notifying us so the listing can be reviewed.</p>' +
         '<h2>Reporting a problem or takedown request</h2>' +
-        '<p>If you are a rights holder and believe a link or any material on CABINET infringes your rights, email <a href="mailto:hello@cabinetarcade.com">hello@cabinetarcade.com</a> with the subject â€œCopyrightâ€ and include:</p>' +
+        '<p>If you are a rights holder and believe a link or any material on ARCADE infringes your rights, email <a href="mailto:hello@arcade.run.place">hello@arcade.run.place</a> with the subject â€œCopyrightâ€ and include:</p>' +
         '<ul>' +
         '<li>Your name and contact details.</li>' +
         '<li>The exact ARCADE URL and the game or link concerned.</li>' +
@@ -826,7 +826,7 @@
         '<li>Do not misrepresent CABINET as affiliated with or endorsed by any game publisher or external host.</li>' +
         '</ul>' +
         '<h2>Intellectual property</h2>' +
-        '<p>Game names, logos and trademarks belong to their respective owners. ARCADE does not host game files and claims no ownership of them. The site design, code and original typographic posters belong to CABINET; see the <a href="info.html?p=copyright">copyright page</a> for details.</p>' +
+        '<p>Game names, logos and trademarks belong to their respective owners. ARCADE does not host game files and claims no ownership of them. The site design, code and original typographic posters belong to ARCADE; see the <a href="info.html?p=copyright">copyright page</a> for details.</p>' +
         '<h2>Privacy</h2>' +
         '<p>Favourites and recent games stay in your browser. The <a href="info.html?p=privacy">privacy page</a> explains what is stored and what happens when you follow an external link.</p>' +
         '<h2>Liability</h2>' +
