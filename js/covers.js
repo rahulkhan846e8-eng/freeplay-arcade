@@ -212,7 +212,7 @@
       '<rect width="600" height="800" fill="url(#dot-' + uid + ')" opacity="0.45"/>' +
       body +
       '<rect x="24" y="24" width="552" height="752" fill="none" stroke="' + alpha(PAPER, 0.18) + '" stroke-width="2"/>' +
-      '<text x="46" y="70" font-family="JetBrains Mono, Consolas, monospace" font-size="13" font-weight="700" letter-spacing="3" fill="' + alpha(PAPER, 0.78) + '">FREE PLAY / ' + collLabel + '</text>' +
+      '<text x="46" y="70" font-family="JetBrains Mono, Consolas, monospace" font-size="13" font-weight="700" letter-spacing="3" fill="' + alpha(PAPER, 0.78) + '">ARCADE / ' + collLabel + '</text>' +
       '<text x="554" y="70" text-anchor="end" font-family="JetBrains Mono, Consolas, monospace" font-size="13" font-weight="700" letter-spacing="2" fill="' + alpha(PAPER, 0.55) + '">NO. ' + index + ' / ' + total + '</text>' +
       '<text x="300" y="590" text-anchor="middle" font-family="Anton, Arial Black, sans-serif" font-size="430" fill="none" stroke="' + alpha(PAPER, 0.9) + '" stroke-width="4" letter-spacing="-8">' + index + '</text>' +
       '<text x="300" y="590" text-anchor="middle" font-family="Anton, Arial Black, sans-serif" font-size="430" fill="' + alpha(accent, 0.1) + '" letter-spacing="-8">' + index + '</text>' +

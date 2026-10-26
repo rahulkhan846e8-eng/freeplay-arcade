@@ -1,4 +1,4 @@
-# FREE PLAY — Browser Arcade
+# ARCADE — Browser Arcade
 
 > **47 browser games across five collections. One click to play.**
 
