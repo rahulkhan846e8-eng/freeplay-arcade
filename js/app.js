@@ -28,6 +28,17 @@
     return text.toLowerCase();
   };
 
+  var updateCleanUrl = function (cleanPath) {
+    if (location.protocol === 'file:') return;
+    try {
+      var current = location.pathname.replace(/^\/+/, '');
+      var target = String(cleanPath).replace(/^\/+/, '');
+      if (current !== target || (location.search && !target.includes('?'))) {
+        history.replaceState(null, '', target);
+      }
+    } catch (err) {}
+  };
+
   /* ---------- storage ---------- */
   var KEY_FAVS = 'cabinet:favs';
   var KEY_RECENT = 'cabinet:recent';
@@ -106,7 +117,7 @@
               '<div class="cover-title">' + esc(g.title) + '</div>' +
             '</div>' +
           '</div>' +
-          '<a class="card-link" href="game.html?g=' + encodeURIComponent(g.slug) + '" aria-label="Open ' + esc(g.title) + '"></a>' +
+          '<a class="card-link" href="' + encodeURIComponent(g.slug) + '" aria-label="Open ' + esc(g.title) + '"></a>' +
           '<span class="cover-play">' + playSvg + ' Open game</span>' +
         '</div>' +
         '<div class="card-meta">' +
@@ -121,7 +132,7 @@
 
   function systemCardHTML(c, i) {
     var count = D.countFor(c.id);
-    return '<a class="system-card reveal" href="collection.html?c=' + c.id + '" style="--sys:' + c.color + ';--sys-ink:' + c.ink + ';transition-delay:' + (i * 50) + 'ms">' +
+    return '<a class="system-card reveal" href="collection?c=' + c.id + '" style="--sys:' + c.color + ';--sys-ink:' + c.ink + ';transition-delay:' + (i * 50) + 'ms">' +
       '<span class="system-index">' + String(i + 1).padStart(2, '0') + ' / ' + esc(c.label) + '</span>' +
       '<div><h3>' + esc(c.name) + '</h3><p>' + esc(c.blurb) + '</p></div>' +
       '<div class="system-foot"><span class="count">' + String(count).padStart(2, '0') + ' games</span>' +
@@ -181,7 +192,7 @@
           return !m || decodeURIComponent(m[1]) !== g.slug;
         });
         var g = pool[Math.floor(Math.random() * pool.length)];
-        window.location.href = 'game.html?g=' + encodeURIComponent(g.slug);
+        window.location.href = encodeURIComponent(g.slug);
       });
     });
     var clear = $('[data-clear-recent]');
@@ -235,7 +246,7 @@
       html += '<div class="search-group-label">Jump to a collection</div>';
       items.forEach(function (item, i) {
         var c = item.c;
-        html += '<a class="search-item' + (i === 0 ? ' active' : '') + '" href="collection.html?c=' + c.id + '" data-search-item="' + i + '">' +
+        html += '<a class="search-item' + (i === 0 ? ' active' : '') + '" href="collection?c=' + c.id + '" data-search-item="' + i + '">' +
           '<span class="thumb" style="background:' + c.color + ';display:grid;place-items:center;font-family:var(--font-display);font-size:16px;color:#0a0a0c">' + esc(c.label.slice(0, 2)) + '</span>' +
           '<span><span class="s-title">' + esc(c.name) + '</span><span class="s-meta">' + D.countFor(c.id) + ' games</span></span>' +
           arrowSvg.replace('<svg', '<svg class="s-arrow"') + '</a>';
@@ -246,7 +257,7 @@
       html += '<div class="search-group-label">' + items.length + ' result' + (items.length === 1 ? '' : 's') + '</div>';
       items.forEach(function (item, i) {
         var g = item.g, c = D.collection(g.collection);
-        html += '<a class="search-item' + (i === 0 ? ' active' : '') + '" href="game.html?g=' + encodeURIComponent(g.slug) + '" data-search-item="' + i + '">' +
+        html += '<a class="search-item' + (i === 0 ? ' active' : '') + '" href="' + encodeURIComponent(g.slug) + '" data-search-item="' + i + '">' +
           '<span class="thumb">' + C.coverHTML(g) + '</span>' +
           '<span><span class="s-title">' + esc(g.title) + '</span><span class="s-meta">' + esc(c.name) + ' / ' + esc(g.genre) + '</span></span>' +
           arrowSvg.replace('<svg', '<svg class="s-arrow"') + '</a>';
@@ -364,7 +375,7 @@
         var list = D.games.filter(function (g) { return g.collection === c.id; });
         var cards = list.map(function (g, i) { return cardHTML(g, i, true); }).join('');
         var cta = list.length < 3
-          ? '<a class="shelf-cta reveal" href="collection.html?c=' + c.id + '" style="--sys:' + c.color + ';--sys-ink:' + c.ink + '">' +
+          ? '<a class="shelf-cta reveal" href="collection?c=' + c.id + '" style="--sys:' + c.color + ';--sys-ink:' + c.ink + '">' +
               '<span class="eyebrow">Collection</span>' +
               '<span class="cta-big">View all<br><em>' + list.length + ' games</em></span>' +
               '<span class="cta-round">' + arrowSvg + '</span>' +
@@ -376,14 +387,14 @@
               '<div><span class="eyebrow">Collection ' + String(ci + 1).padStart(2, '0') + '</span>' +
               '<h2>' + esc(c.name) + '</h2>' +
               '<p>' + esc(c.long) + '</p></div>' +
-              '<div class="head-action"><a class="text-link" href="collection.html?c=' + c.id + '">See all ' + list.length + arrowSvg + '</a></div>' +
+              '<div class="head-action"><a class="text-link" href="collection?c=' + c.id + '">See all ' + list.length + arrowSvg + '</a></div>' +
             '</div>' +
             '<div class="shelf" style="--sys:' + c.color + ';--sys-ink:' + c.ink + '">' +
               '<div class="shelf-intro reveal">' +
                 '<div><span class="system-index">' + esc(c.label) + ' / ' + String(list.length).padStart(2, '0') + '</span>' +
                 '<h3 style="margin-top:12px">' + esc(c.blurb.split('.')[0]) + '.</h3></div>' +
                 '<p>' + esc(c.blurb) + '</p>' +
-                '<a class="text-link" href="collection.html?c=' + c.id + '">Enter collection ' + arrowSvg + '</a>' +
+                '<a class="text-link" href="collection?c=' + c.id + '">Enter collection ' + arrowSvg + '</a>' +
               '</div>' +
               cards + cta +
             '</div>' +
@@ -393,6 +404,7 @@
     }
     renderRecent();
     revealInit();
+    updateCleanUrl('home');
   }
 
   function renderRecent() {
@@ -405,7 +417,7 @@
     strip.innerHTML = list.map(function (slug) {
       var g = D.game(slug);
       var c = D.collection(g.collection);
-      return '<a class="recent-item" href="game.html?g=' + encodeURIComponent(slug) + '">' +
+      return '<a class="recent-item" href="' + encodeURIComponent(slug) + '">' +
         '<span class="rthumb">' + C.coverHTML(g) + '</span>' +
         '<span><span class="rname">' + esc(g.title) + '</span><span class="rmeta">' + esc(c.label) + ' / ' + esc(g.genre) + '</span></span>' +
       '</a>';
@@ -445,11 +457,11 @@
     if (state.mode === 'fav') {
       title = 'My <em>shelf.</em>'; eyebrow = 'Saved locally'; color = 'var(--acid)'; inkColor = '#0b0b0b';
       lede = 'The games you have bookmarked. Saved in this browser only / no account, no cloud, no fuss.';
-      crumb = '<a href="index.html">Home</a> / My shelf';
+      crumb = '<a href="home">Home</a> / My shelf';
     } else if (state.query) {
       title = 'Search <em>results.</em>'; eyebrow = 'Query: ' + esc(state.query); color = 'var(--acid)'; inkColor = '#0b0b0b';
       lede = 'Showing games matching “' + esc(state.query) + '”.';
-      crumb = '<a href="index.html">Home</a> / Search';
+      crumb = '<a href="home">Home</a> / Search';
     } else if (c) {
       var collectionTitles = {
         open: 'Open <em>Worlds</em>',
@@ -463,11 +475,11 @@
       color = c.color;
       inkColor = c.ink;
       lede = c.long;
-      crumb = '<a href="index.html">Home</a> / ' + esc(c.name);
+      crumb = '<a href="home">Home</a> / ' + esc(c.name);
     } else {
       title = 'Explore <em>All Games.</em>'; eyebrow = 'All 48 Games Available'; color = 'var(--acid)'; inkColor = '#0b0b0b';
       lede = 'Every game available on ARCADE, all in one place. Filter by genre, search, or pick any cabinet to start playing.';
-      crumb = '<a href="index.html">Home</a> / Explore All';
+      crumb = '<a href="home">Home</a> / Explore All';
     }
 
     document.title = (state.mode === 'fav' ? 'My shelf' : state.query ? 'Search' : c ? c.name : 'Explore All Games') + ' — ARCADE';
@@ -518,7 +530,7 @@
       if (!list.length) {
         empty.innerHTML = '<div class="empty-state"><h3>Nothing on this shelf yet.</h3>' +
           '<p>' + (state.mode === 'fav' ? 'Tap the heart on any game to keep it here. Your shelf lives in this browser.' : 'Try another genre, or head back to the full collection.') + '</p>' +
-          '<a class="btn" href="' + (state.mode === 'fav' ? 'collection.html?c=all' : 'index.html') + '">' + (state.mode === 'fav' ? 'Browse all games' : 'Back to the arcade') + '</a></div>';
+          '<a class="btn" href="' + (state.mode === 'fav' ? 'collection?c=all' : 'home') + '">' + (state.mode === 'fav' ? 'Browse all games' : 'Back to the arcade') + '</a></div>';
       } else {
         empty.innerHTML = '';
       }
@@ -555,6 +567,7 @@
       var allLink = $('.main-nav [data-nav="all"]');
       if (allLink) allLink.classList.add('active');
     }
+    updateCleanUrl('collection' + (location.search || ''));
   }
 
   /* ---------- game page ---------- */
@@ -587,7 +600,7 @@
 
     root.innerHTML =
       '<div class="wrap game-page">' +
-        '<div class="breadcrumb"><a href="index.html">Home</a> / <a href="collection.html?c=' + g.collection + '">' + esc(c.name) + '</a> / ' + esc(g.title) + '</div>' +
+        '<div class="breadcrumb"><a href="home">Home</a> / <a href="collection?c=' + g.collection + '">' + esc(c.name) + '</a> / ' + esc(g.title) + '</div>' +
         '<div class="game-head">' +
           '<div class="game-titleblock">' +
             '<span class="eyebrow">' + esc(c.label) + ' / ' + esc(g.genre) + ' / LINK ' + number + '</span>' +
@@ -727,14 +740,14 @@
             '<div class="info-card">' +
               '<h3>Found a problem?</h3>' +
               '<p class="small-copy">Wrong game behind the button? Dead link? Tell us the game title and what happened, and we will check it.</p>' +
-              '<a class="text-link" href="info.html?p=contact">Report a link ' + arrowSvg + '</a>' +
+              '<a class="text-link" href="info?p=contact">Report a link ' + arrowSvg + '</a>' +
             '</div>' +
           '</aside>' +
         '</div>' +
 
         '<section class="related">' +
           '<div class="section-head"><div><span class="eyebrow">Keep browsing</span><h2 style="font-size:clamp(26px,3vw,38px)">More from <em>' + esc(c.name) + '.</em></h2></div>' +
-          '<div class="head-action"><a class="text-link" href="collection.html?c=' + g.collection + '">See all ' + D.countFor(g.collection) + arrowSvg + '</a></div></div>' +
+          '<div class="head-action"><a class="text-link" href="collection?c=' + g.collection + '">See all ' + D.countFor(g.collection) + arrowSvg + '</a></div></div>' +
           '<div class="game-grid game-grid--3">' + related.map(function (x, i) { return cardHTML(x, i); }).join('') + '</div>' +
         '</section>' +
       '</div>';
@@ -772,7 +785,7 @@
         '<h2>What ARCADE is — and is not</h2>' +
         '<p>ARCADE does not host game files, ROMs, ISOs or emulators, and does not claim ownership of any game. The catalogue links to third-party sites that provide the playable versions. Game names, logos and trademarks belong to their respective owners. ARCADE is independent and is not affiliated with, endorsed by or sponsored by any publisher, platform holder, storefront or external host.</p>' +
         '<h2>What we made</h2>' +
-        '<p>The site design, front-end code and every typographic poster are original to ARCADE. The posters are generated as SVG from each game’s catalogue number, collection palette and a geometric motif; they do not reproduce box art, screenshots or publisher imagery. The single real photograph — the Tokyo arcade on the homepage — is openly licensed and credited in full on the <a href="info.html?p=copyright">copyright page</a>.</p>' +
+        '<p>The site design, front-end code and every typographic poster are original to ARCADE. The posters are generated as SVG from each game’s catalogue number, collection palette and a geometric motif; they do not reproduce box art, screenshots or publisher imagery. The single real photograph — the Tokyo arcade on the homepage — is openly licensed and credited in full on the <a href="info?p=copyright">copyright page</a>.</p>' +
         '<h2>How it is built</h2>' +
         '<ul>' +
         '<li>Plain HTML, CSS and JavaScript — no framework, no build step.</li>' +
@@ -781,9 +794,9 @@
         '<li>No ads, no analytics and no tracking scripts on ARCADE itself.</li>' +
         '<li>Anton, Space Grotesk and JetBrains Mono served by Google Fonts.</li>' +
         '</ul>' +
-        '<div class="info-card-callout"><p><strong>External links.</strong> Play opens a third-party site. Its terms, privacy policy, ads and availability are outside our control. A link is a signpost, not an endorsement. See the <a href="info.html?p=terms">terms</a> and <a href="info.html?p=privacy">privacy</a> pages for the plain-language version.</p></div>' +
+        '<div class="info-card-callout"><p><strong>External links.</strong> Play opens a third-party site. Its terms, privacy policy, ads and availability are outside our control. A link is a signpost, not an endorsement. See the <a href="info?p=terms">terms</a> and <a href="info?p=privacy">privacy</a> pages for the plain-language version.</p></div>' +
         '<h2>Keeping the list honest</h2>' +
-        '<p>If a Play link is dead, points to the wrong game or should not be listed, tell us through the <a href="info.html?p=contact">contact page</a>. We would rather remove a broken cabinet than leave a misleading one.</p>'
+        '<p>If a Play link is dead, points to the wrong game or should not be listed, tell us through the <a href="info?p=contact">contact page</a>. We would rather remove a broken cabinet than leave a misleading one.</p>'
     },
     contact: {
       label: 'Contact',
@@ -801,7 +814,7 @@
         '<li>A screenshot, if you have one. It is the fastest way to show a mismatch.</li>' +
         '</ul>' +
         '<h2>Copyright and removal requests</h2>' +
-        '<p>ARCADE does not host the games. If you are a rights holder and want a link removed, email with the subject “Copyright” and include the exact ARCADE page, the game and link concerned, and a statement that you are authorised to act for the rights holder. We review these promptly and will remove or amend the link where appropriate. The <a href="info.html?p=copyright">copyright page</a> has the full process.</p>' +
+        '<p>ARCADE does not host the games. If you are a rights holder and want a link removed, email with the subject “Copyright” and include the exact ARCADE page, the game and link concerned, and a statement that you are authorised to act for the rights holder. We review these promptly and will remove or amend the link where appropriate. The <a href="info?p=copyright">copyright page</a> has the full process.</p>' +
         '<h2>Game support</h2>' +
         '<p>We cannot fix saves, controls, accounts or performance inside an external game. Those belong to the site hosting it. We can remove or replace the signpost if the destination is no longer right.</p>' +
         '<div class="info-card-callout"><p>We are a tiny project, not a support desk. Replies can take a little while — but reports of mismatched or dead links go to the top of the pile.</p></div>'
@@ -885,9 +898,9 @@
         '<li>Do not misrepresent ARCADE as affiliated with or endorsed by any game publisher or external host.</li>' +
         '</ul>' +
         '<h2>Intellectual property</h2>' +
-        '<p>Game names, logos and trademarks belong to their respective owners. ARCADE does not host game files and claims no ownership of them. The site design, code and original typographic posters belong to ARCADE; see the <a href="info.html?p=copyright">copyright page</a> for details.</p>' +
+        '<p>Game names, logos and trademarks belong to their respective owners. ARCADE does not host game files and claims no ownership of them. The site design, code and original typographic posters belong to ARCADE; see the <a href="info?p=copyright">copyright page</a> for details.</p>' +
         '<h2>Privacy</h2>' +
-        '<p>Favourites and recent games stay in your browser. The <a href="info.html?p=privacy">privacy page</a> explains what is stored and what happens when you follow an external link.</p>' +
+        '<p>Favourites and recent games stay in your browser. The <a href="info?p=privacy">privacy page</a> explains what is stored and what happens when you follow an external link.</p>' +
         '<h2>Liability</h2>' +
         '<p>To the extent permitted by law, ARCADE is not liable for indirect or consequential loss arising from use of the site or any external site it links to. Nothing in these terms excludes rights that cannot legally be excluded.</p>' +
         '<h2>Changes</h2>' +
@@ -908,7 +921,7 @@
       '<div class="wrap info-layout">' +
         '<nav class="info-nav" aria-label="Information pages">' +
           Object.keys(INFO).map(function (k) {
-            return '<a href="info.html?p=' + k + '" class="' + (k === key ? 'active' : '') + '">' + INFO[k].label + '</a>';
+            return '<a href="info?p=' + k + '" class="' + (k === key ? 'active' : '') + '">' + INFO[k].label + '</a>';
           }).join('') +
         '</nav>' +
         '<article class="info-content">' +
