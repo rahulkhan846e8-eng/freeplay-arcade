@@ -993,7 +993,7 @@ em { font-style: normal; }
 }
 
 .filter-bar {
-  position: sticky; top: var(--header-h); z-index: 40;
+  position: relative;
   background: var(--paper);
   border-bottom: 3px solid var(--ink);
 }
