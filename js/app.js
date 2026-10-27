@@ -618,17 +618,17 @@
                     ? '<span class="eyebrow">Select a server to play / external game</span>' +
                       '<h2 class="play-word">Servers</h2>' +
                       '<p class="play-game-name">' + esc(g.title) + '</p>' +
-                      '<div class="server-btn-grid" style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:16px;max-width:540px;">' +
+                      '<div class="server-btn-grid">' +
                         g.servers.map(function (s, idx) {
                           var sName = s.name || ('Server ' + (idx + 1));
                           var sHost = hostOf(s.url);
-                          var bgStyle = idx === 1 ? 'background:#ffffff;' : (idx > 1 ? 'background:var(--paper);' : '');
-                          return '<a class="play-big play-big--xl server-btn" href="' + safeUrl(s.url) + '" target="_blank" data-play-link rel="noopener noreferrer" style="min-width:160px;justify-content:center;' + bgStyle + '">' +
+                          var cls = 'play-big play-big--xl server-btn' + (idx === 1 ? ' server-btn--alt' : (idx > 1 ? ' server-btn--ghost' : ''));
+                          return '<a class="' + cls + '" href="' + safeUrl(s.url) + '" target="_blank" data-play-link rel="noopener noreferrer">' +
                             playSvg + ' ' + esc(sName) +
                           '</a>';
                         }).join('') +
                       '</div>' +
-                      '<span class="hint" style="margin-top:12px;">' + g.servers.length + ' mirror servers available · opens in a new tab · not hosted by ARCADE</span>'
+                      '<span class="hint">' + g.servers.length + ' mirror servers available · opens in a new tab · not hosted by ARCADE</span>'
                     : '<span class="eyebrow">Ready to play / external game</span>' +
                       '<h2 class="play-word">Play</h2>' +
                       '<p class="play-game-name">' + esc(g.title) + '</p>' +

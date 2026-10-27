@@ -1280,6 +1280,27 @@ em { font-style: normal; }
   color: #bdb7a8;
   text-align: center;
 }
+.server-btn-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 16px;
+  max-width: 540px;
+}
+.server-btn {
+  min-width: 160px;
+  justify-content: center;
+}
+.server-btn--alt {
+  background: #ffffff;
+}
+.server-btn--alt:hover {
+  background: var(--paper-2);
+}
+.server-btn--ghost {
+  background: var(--paper);
+}
 
 .play-notice {
   display: flex; align-items: flex-start; gap: 13px;
@@ -1888,13 +1909,16 @@ kbd {
   .game-layout .info-panel { grid-template-columns: 1fr 1fr; }
   .game-layout .info-cover { grid-row: auto; grid-column: 1 / -1; max-width: 220px; }
   .game-layout .best-score-card { grid-column: 1 / -1; }
+  .stage--play { min-height: 330px; aspect-ratio: auto; }
   .stage-overlay { padding: 18px; }
   .stage-overlay h2 { font-size: 31px; }
   .stage-overlay p { font-size: 11px; }
   .stage-overlay .hint { display: none; }
-  .stage-overlay--play .play-word { font-size: clamp(64px, 16vw, 112px); }
-  .stage-overlay--play .play-game-name { font-size: clamp(16px, 3.6vw, 22px); }
-  .play-big--xl { margin-top: 12px; padding: 11px 17px; font-size: 10px; }
+  .stage-overlay--play .play-word { font-size: clamp(48px, 12vw, 84px); margin: 0 auto 6px; }
+  .stage-overlay--play .play-game-name { font-size: clamp(14px, 3.2vw, 20px); margin: 0 auto 8px; }
+  .play-big--xl { margin-top: 10px; padding: 10px 16px; font-size: 9.5px; }
+  .server-btn-grid { gap: 10px; margin-top: 10px; }
+  .server-btn { min-width: 130px; padding: 10px 16px; font-size: 10px; }
   .play-notice { padding: 13px 14px; }
   .idle-cover { opacity: 0.3; }
   .stage-hud { padding: 6px; }
@@ -1927,17 +1951,27 @@ kbd {
   .hero-actions { display: grid; grid-template-columns: 1fr; }
   .hero-stats b { font-size: 27px; }
   .systems { gap: 12px; }
-  .shelf { grid-template-columns: 1fr; }
-  .shelf-intro { grid-column: span 1; }
-  .shelf .game-card { box-shadow: 4px 4px 0 var(--sys-ink, var(--ink)); }
+  .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 10px; }
+  .shelf-intro {
+    grid-column: span 2;
+    gap: 10px;
+    padding: 6px 4px 4px;
+  }
+  .shelf-intro h3 { font-size: 22px; line-height: 0.95; margin-top: 8px; }
+  .shelf-intro p { font-size: 11px; line-height: 1.4; }
+  .shelf-cta { grid-column: span 2; padding: 12px 14px; gap: 10px; }
+  .shelf-cta .cta-big { font-size: 20px; }
+  .shelf .game-card { box-shadow: 3px 3px 0 var(--sys-ink, var(--ink)); }
   .game-grid,
-  .game-grid--3 { grid-template-columns: 1fr; gap: 18px; }
-  .cover-title { font-size: 32px; }
-  .cover-collection { font-size: 7.5px; }
-  .cover-chip { font-size: 7.5px; }
-  .cover-ui { padding: 13px; }
-  .fav-btn { width: 34px; height: 34px; }
-  .card-meta { font-size: 8px; padding: 9px 10px; }
+  .game-grid--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .game-card { box-shadow: 3px 3px 0 var(--ink); }
+  .cover-title { font-size: clamp(15px, 4.2vw, 19px); line-height: 0.92; }
+  .cover-collection { font-size: 6px; letter-spacing: 0.04em; }
+  .cover-chip { font-size: 6px; padding: 2px 4px; }
+  .cover-ui { padding: 8px 7px; }
+  .fav-btn { width: 26px; height: 26px; }
+  .fav-btn svg { width: 11px; height: 11px; }
+  .card-meta { font-size: 6.8px; padding: 6px 7px; gap: 3px; }
   .recent-item { flex-basis: 82%; }
   .footer-grid { grid-template-columns: 1fr; gap: 22px; }
   .footer-brand { grid-column: auto; }
@@ -1946,14 +1980,20 @@ kbd {
   .hero-sticker b { font-size: 26px; }
   .hero-barcode { display: none; }
   .stage { aspect-ratio: 4 / 3; }
+  .stage--play { aspect-ratio: auto; min-height: 330px; }
   .stage-hud .hud-pill:nth-child(3) { display: none; }
+  .stage-overlay { padding: 16px 12px; }
   .stage-overlay h2 { font-size: 25px; }
   .stage-overlay p { display: none; }
-  .stage-overlay--play .play-game-name { display: block; font-size: 17px; }
-  .stage-overlay--play .play-word { font-size: clamp(56px, 17vw, 88px); }
-  .stage-overlay .eyebrow { font-size: 7.5px; }
-  .play-big { padding: 10px 16px; font-size: 9px; }
-  .play-big--xl { padding: 10px 14px; font-size: 9px; }
+  .stage-overlay--play { padding: 18px 12px; gap: 3px; justify-content: center; }
+  .stage-overlay--play .play-game-name { display: block; font-size: 13.5px; margin: 0 auto 6px; max-width: 26ch; line-height: 1.1; }
+  .stage-overlay--play .play-word { font-size: clamp(36px, 10.5vw, 48px); margin: 0 auto 3px; line-height: 0.88; }
+  .stage-overlay .eyebrow { font-size: 7.5px; margin-bottom: 3px; letter-spacing: 0.08em; }
+  .play-big { padding: 9px 15px; font-size: 9px; }
+  .play-big--xl { padding: 9px 14px; font-size: 9px; }
+  .server-btn-grid { display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px !important; margin-top: 8px !important; width: 100%; max-width: 100% !important; justify-content: center; }
+  .stage-overlay--play .server-btn { min-width: 110px !important; flex: 0 1 auto; padding: 9px 13px !important; font-size: 9px !important; box-shadow: 3px 3px 0 var(--ink); }
+  .stage-overlay--play .hint { display: block !important; font-size: 7.5px; margin-top: 6px !important; opacity: 0.75; }
   .touch-dpad { grid-template-columns: repeat(3, 34px); grid-template-rows: repeat(3, 34px); }
   .touch-btn { width: 34px; height: 34px; }
   .touch-action .touch-btn { width: 52px; height: 52px; }
@@ -1966,7 +2006,11 @@ kbd {
 
 @media (max-width: 380px) {
   .hero h1 { font-size: 47px; }
-  .cover-title { font-size: 27px; }
+  .cover-title { font-size: 15px; }
+  .game-grid,
+  .game-grid--3,
+  .shelf { gap: 8px; }
+  .stage-overlay--play .server-btn { min-width: 98px !important; padding: 8px 10px !important; font-size: 8.5px !important; }
   .hero-photo figcaption { font-size: 6.5px; }
   .info-nav { flex-wrap: wrap; overflow-x: visible; }
 }
