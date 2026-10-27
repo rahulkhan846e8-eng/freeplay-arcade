@@ -575,10 +575,10 @@
     var root = $('#game-root');
     if (!root) return;
     var params = new URLSearchParams(location.search);
-    var slug = params.get('g');
+    var slug = document.body.getAttribute('data-slug') || params.get('g') || (location.pathname.split('/').filter(Boolean).pop() || '').replace(/\.html$/, '');
     var g = D.game(slug);
     if (!g) {
-      root.innerHTML = '<section class="info-page"><div class="wrap"><div class="empty-state"><h3>Game not found.</h3><p>That game slot is empty. Pick another game from the floor.</p><a class="btn" href="index.html">Back to the arcade</a></div></div></section>';
+      root.innerHTML = '<section class="info-page"><div class="wrap"><div class="empty-state"><h3>Game not found.</h3><p>That game slot is empty. Pick another game from the floor.</p><a class="btn" href="home">Back to the arcade</a></div></div></section>';
       return;
     }
     var c = D.collection(g.collection);
@@ -587,6 +587,7 @@
     var number = String(g.index).padStart(2, '0');
     var hasServers = Array.isArray(g.servers) && g.servers.length > 1;
     document.title = g.title + ' — Play — ARCADE';
+    updateCleanUrl(g.slug);
     var meta = $('meta[name="description"]');
     if (meta) meta.setAttribute('content', 'Play ' + g.title + ', a ' + g.genre + ' game in the ' + c.name + ' collection. Play opens ' + host + ' in a new tab. ARCADE does not host the game.');
 
