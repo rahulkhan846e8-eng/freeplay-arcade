@@ -477,7 +477,7 @@
       lede = c.long;
       crumb = '<a href="home">Home</a> / ' + esc(c.name);
     } else {
-      title = 'Explore <em>All Games.</em>'; eyebrow = 'All 48 Games Available'; color = 'var(--acid)'; inkColor = '#0b0b0b';
+      title = 'Explore <em>All Games.</em>'; eyebrow = 'All 148 Games Available'; color = 'var(--acid)'; inkColor = '#0b0b0b';
       lede = 'Every game available on ARCADE, all in one place. Filter by genre, search, or pick any cabinet to start playing.';
       crumb = '<a href="home">Home</a> / Explore All';
     }
@@ -771,9 +771,9 @@
   var INFO = {
     about: {
       label: 'About',
-      title: '48 games. <em>One click</em> <span class="nowrap">from play.</span>',
+      title: '148 games. <em>One click</em> <span class="nowrap">from play.</span>',
       body:
-        '<p>ARCADE is a browser arcade index: 48 games, five collections and one job — get you from the shelf to the game with as little friction as possible.</p>' +
+        '<p>ARCADE is a browser arcade index: 148 games, five collections and one job — get you from the shelf to the game with as little friction as possible.</p>' +
         '<p>Every cabinet has its own page. That page tells you what you are looking at, names the external host, and gives you a big Play button. Press it and you go directly to the matching game on its own play page, in a new tab. No install, no account, no emulator setup on our side.</p>' +
         '<h2>How the floor is organised</h2>' +
         '<ul>' +
@@ -790,7 +790,7 @@
         '<h2>How it is built</h2>' +
         '<ul>' +
         '<li>Plain HTML, CSS and JavaScript — no framework, no build step.</li>' +
-        '<li>Original SVG poster art generated in code for all 48 links.</li>' +
+        '<li>Original SVG poster art generated in code for all 148 links.</li>' +
         '<li>Favourites and recent games saved in localStorage; no account and no backend.</li>' +
         '<li>No ads, no analytics and no tracking scripts on ARCADE itself.</li>' +
         '<li>Anton, Space Grotesk and JetBrains Mono served by Google Fonts.</li>' +
@@ -803,7 +803,7 @@
       label: 'Contact',
       title: 'Report a <em>dead link.</em>',
       body:
-        '<p>ARCADE is a small index with one important maintenance job: making sure each of the 48 Play buttons lands on the right game. If something is broken, wrong or missing, we want to hear about it.</p>' +
+        '<p>ARCADE is a small index with one important maintenance job: making sure each of the 148 Play buttons lands on the right game. If something is broken, wrong or missing, we want to hear about it.</p>' +
         '<h2>Email</h2>' +
         '<p><a href="mailto:hello@arcade.run.place">hello@arcade.run.place</a></p>' +
         '<h2>What to include</h2>' +
@@ -834,7 +834,7 @@
         '<h2>What ARCADE owns</h2>' +
         '<ul>' +
         '<li><strong>Site design and code:</strong> the layout, styles, interaction design and JavaScript are original work created for this project.</li>' +
-        '<li><strong>Typographic posters:</strong> all 48 covers are original SVG artwork generated in code from catalogue numbers, collection palettes and geometric motifs. They do not reproduce box art, screenshots or publisher illustrations.</li>' +
+        '<li><strong>Typographic posters:</strong> all 148 covers are original SVG artwork generated in code from catalogue numbers, collection palettes and geometric motifs. They do not reproduce box art, screenshots or publisher illustrations.</li>' +
         '<li><strong>Photography:</strong> one real photograph is used, the homepage hero. It is openly licensed and credited below.</li>' +
         '<li><strong>Fonts:</strong> Anton, Space Grotesk and JetBrains Mono are served by Google Fonts under their respective open font licences.</li>' +
         '</ul>' +
