@@ -207,32 +207,235 @@
   /* ---------- search ---------- */
   var searchState = { items: [], active: -1 };
 
-  function searchIndex(query) {
-    var q = norm(query.trim());
-    if (!q) {
+  var ROMAN_TO_NUM = {
+    'i': '1', 'ii': '2', 'iii': '3', 'iv': '4', 'v': '5',
+    'vi': '6', 'vii': '7', 'viii': '8', 'ix': '9', 'x': '10',
+    'xi': '11', 'xii': '12', 'xiii': '13'
+  };
+  var NUM_TO_ROMAN = {
+    '1': 'i', '2': 'ii', '3': 'iii', '4': 'iv', '5': 'v',
+    '6': 'vi', '7': 'vii', '8': 'viii', '9': 'ix', '10': 'x',
+    '11': 'xi', '12': 'xii', '13': 'xiii'
+  };
+
+  var ACRONYMS = {
+    'gta': ['grand theft auto'],
+    'cs': ['counter strike'],
+    'css': ['counter strike source'],
+    'cod': ['call of duty'],
+    'waw': ['world at war'],
+    'dbz': ['dragon ball z', 'dragon ball'],
+    're': ['resident evil'],
+    're4': ['resident evil 4'],
+    'gow': ['god of war'],
+    'thps': ['tony hawk', 'tony hawks pro skater'],
+    'thug': ['tony hawk underground'],
+    'mk': ['mortal kombat'],
+    'sm64': ['super mario 64', 'super mario'],
+    'smz': ['super mario zombies'],
+    'mc': ['minecraft'],
+    'pes': ['pro evolution soccer'],
+    'wwe': ['smackdown vs raw', 'smackdown'],
+    'svr': ['smackdown vs raw'],
+    'nfs': ['need for speed'],
+    'mvc': ['marvel vs capcom'],
+    'mvc2': ['marvel vs capcom 2']
+  };
+
+  function cleanSearchText(s) {
+    if (!s) return '';
+    var text = String(s);
+    if (text.normalize) text = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return text.toLowerCase()
+      .replace(/['â€™`]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function editDistance(a, b) {
+    if (a === b) return 0;
+    var la = a.length, lb = b.length;
+    if (Math.abs(la - lb) > 2) return 99;
+    var d = [];
+    for (var i = 0; i <= la; i++) d[i] = [i];
+    for (var j = 1; j <= lb; j++) d[0][j] = j;
+    for (var i = 1; i <= la; i++) {
+      var ca = a.charCodeAt(i - 1);
+      for (var j = 1; j <= lb; j++) {
+        var cb = b.charCodeAt(j - 1);
+        var cost = (ca === cb) ? 0 : 1;
+        var dist = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+        if (i > 1 && j > 1 && ca === b.charCodeAt(j - 2) && a.charCodeAt(i - 2) === cb) {
+          dist = Math.min(dist, d[i - 2][j - 2] + 1);
+        }
+        d[i][j] = dist;
+      }
+    }
+    return d[la][lb];
+  }
+
+  function matchWordScore(qw, tw) {
+    if (qw === tw) return 100;
+    if (ROMAN_TO_NUM[qw] === tw || NUM_TO_ROMAN[qw] === tw || ROMAN_TO_NUM[tw] === qw || NUM_TO_ROMAN[tw] === qw) {
+      return 95;
+    }
+    if (tw.indexOf(qw) === 0 && qw.length >= 3) {
+      return 85;
+    }
+    if (tw.indexOf(qw) !== -1 && qw.length >= 3) {
+      return 70;
+    }
+    var len = qw.length;
+    if (len >= 3) {
+      var dist = editDistance(qw, tw);
+      if (dist === 1) return len === 3 ? 65 : 75;
+      if (dist === 2 && len >= 5) return 50;
+    }
+    return 0;
+  }
+
+  var _searchCache = null;
+  function getSearchIndex() {
+    if (_searchCache) return _searchCache;
+    _searchCache = D.games.map(function (g) {
+      var c = D.collection(g.collection) || {};
+      var rawTitle = cleanSearchText(g.title);
+      var titleWords = rawTitle.split(/\s+/).filter(Boolean);
+      var numTitle = titleWords.map(function (w) { return ROMAN_TO_NUM[w] || w; }).join(' ');
+      var hayText = cleanSearchText(g.sourceTitle + ' ' + g.genre + ' ' + (c.name || '') + ' ' + (c.label || '') + ' ' + g.slug);
+      var hayWords = hayText.split(/\s+/).filter(Boolean);
+      var initials = titleWords.map(function (w) { return w[0]; }).join('');
+      return {
+        g: g,
+        rawTitle: rawTitle,
+        titleWords: titleWords,
+        numTitle: numTitle,
+        hayWords: hayWords,
+        initials: initials,
+        featured: !!g.featured
+      };
+    });
+    return _searchCache;
+  }
+
+  function searchIndex(query, limit) {
+    var rawQ = cleanSearchText(query);
+    if (!rawQ) {
       return D.collections.map(function (c) {
         return { type: 'collection', c: c };
       });
     }
-    var words = q.split(/\s+/);
-    var found = D.games.map(function (g) {
-      var c = D.collection(g.collection);
-      var hay = norm(g.title + ' ' + g.sourceTitle + ' ' + g.genre + ' ' + c.name + ' ' + c.label + ' ' + g.index);
-      var title = norm(g.title);
+
+    var qWords = rawQ.split(/\s+/).filter(Boolean);
+    if (!qWords.length) return [];
+
+    var normQNumbers = qWords.map(function (w) { return ROMAN_TO_NUM[w] || w; }).join(' ');
+    var index = getSearchIndex();
+    var scored = [];
+
+    for (var k = 0; k < index.length; k++) {
+      var item = index[k];
       var score = 0;
-      if (title === q) score += 120;
-      else if (title.indexOf(q) === 0) score += 80;
-      else if (title.indexOf(q) !== -1) score += 55;
-      if (hay.indexOf(q) !== -1) score += 20;
-      words.forEach(function (w) {
-        if (title.indexOf(w) !== -1) score += 30;
-        if (hay.indexOf(w) !== -1) score += 5;
-      });
-      return { g: g, score: score };
-    }).filter(function (r) { return r.score > 0; })
-      .sort(function (a, b) { return b.score - a.score; })
-      .slice(0, 9);
-    return found.map(function (r) { return { type: 'game', g: r.g }; });
+      var title = item.rawTitle;
+      var numTitle = item.numTitle;
+
+      if (title === rawQ || numTitle === normQNumbers) {
+        score += 1500;
+      } else if (title.indexOf(rawQ) === 0 || numTitle.indexOf(normQNumbers) === 0) {
+        score += 700;
+      } else if (title.indexOf(rawQ) !== -1 || numTitle.indexOf(normQNumbers) !== -1) {
+        score += 400;
+      }
+
+      if (qWords.length === 1) {
+        var single = qWords[0];
+        if (item.initials === single) {
+          score += 350;
+        } else if (ACRONYMS[single]) {
+          for (var i = 0; i < ACRONYMS[single].length; i++) {
+            if (title.indexOf(ACRONYMS[single][i]) !== -1) {
+              score += 350;
+              break;
+            }
+          }
+        }
+      }
+
+      var matchedQueryWords = 0;
+      var totalWordScore = 0;
+      var nonNumericMatched = 0;
+
+      for (var qi = 0; qi < qWords.length; qi++) {
+        var qw = qWords[qi];
+        var isNum = /^\d+$/.test(qw) || !!ROMAN_TO_NUM[qw];
+        var bestScore = 0;
+
+        for (var ti = 0; ti < item.titleWords.length; ti++) {
+          var s = matchWordScore(qw, item.titleWords[ti]);
+          if (s > bestScore) bestScore = s;
+        }
+
+        if (ACRONYMS[qw]) {
+          var exps = ACRONYMS[qw];
+          for (var ei = 0; ei < exps.length; ei++) {
+            var eWords = exps[ei].split(/\s+/);
+            for (var ewi = 0; ewi < eWords.length; ewi++) {
+              for (var ti = 0; ti < item.titleWords.length; ti++) {
+                var s = matchWordScore(eWords[ewi], item.titleWords[ti]) * 0.95;
+                if (s > bestScore) bestScore = s;
+              }
+            }
+          }
+        }
+
+        if (bestScore < 50) {
+          for (var hi = 0; hi < item.hayWords.length; hi++) {
+            var hw = item.hayWords[hi];
+            if (hw === qw) {
+              bestScore = Math.max(bestScore, 60);
+            } else if (hw.indexOf(qw) === 0 && qw.length >= 3) {
+              bestScore = Math.max(bestScore, 45);
+            }
+          }
+        }
+
+        if (bestScore >= 45) {
+          matchedQueryWords++;
+          totalWordScore += bestScore;
+          if (!isNum) nonNumericMatched++;
+        }
+      }
+
+      var hasNonNumeric = false;
+      for (var qi = 0; qi < qWords.length; qi++) {
+        if (!/^\d+$/.test(qWords[qi]) && !ROMAN_TO_NUM[qWords[qi]]) {
+          hasNonNumeric = true;
+          break;
+        }
+      }
+      if (hasNonNumeric && nonNumericMatched === 0 && qWords.length > 1) {
+        continue;
+      }
+
+      score += totalWordScore;
+
+      if (matchedQueryWords === qWords.length) {
+        score += 400;
+      } else if (matchedQueryWords > 0 && qWords.length > 1) {
+        score += (matchedQueryWords / qWords.length) * 150;
+      }
+
+      if (item.featured) score += 15;
+      score -= Math.min(20, item.rawTitle.length * 0.5);
+
+      if (score > 40) {
+        scored.push({ type: 'game', g: item.g, score: score });
+      }
+    }
+
+    scored.sort(function (a, b) { return b.score - a.score; });
+    var maxResults = typeof limit === 'number' ? limit : 10;
+    return scored.slice(0, maxResults);
   }
 
   function renderSearch(query) {
@@ -446,13 +649,19 @@
       ? favs().map(D.game).filter(Boolean)
       : D.games.filter(function (g) { return state.mode === 'all' || g.collection === state.mode; });
     if (state.query) {
-      var q = norm(state.query);
+      var searchMatches = searchIndex(state.query, 100);
+      var scoredSlugs = {};
+      searchMatches.forEach(function (item, idx) {
+        if (item.type === 'game') {
+          scoredSlugs[item.g.slug] = idx;
+        }
+      });
       games = games.filter(function (g) {
-        var c = D.collection(g.collection);
-        return norm(g.title + ' ' + g.sourceTitle + ' ' + g.genre + ' ' + c.name).indexOf(q) !== -1;
+        return scoredSlugs.hasOwnProperty(g.slug);
+      }).sort(function (a, b) {
+        return scoredSlugs[a.slug] - scoredSlugs[b.slug];
       });
     }
-
     var title, lede, color, inkColor, eyebrow, crumb;
     if (state.mode === 'fav') {
       title = 'My <em>shelf.</em>'; eyebrow = 'Saved locally'; color = 'var(--acid)'; inkColor = '#0b0b0b';
