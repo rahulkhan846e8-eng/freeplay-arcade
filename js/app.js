@@ -1145,7 +1145,10 @@
   }
 
   /* ---------- boot ---------- */
+  var booted = false;
   function boot() {
+    if (booted) return;
+    booted = true;
     initHeader();
     initSearch();
     updateFavUI();
@@ -1154,13 +1157,29 @@
     else if (page === 'game') renderGame();
     else if (page === 'info') renderInfo();
     else revealInit();
+    if (document.body) {
+      document.body.classList.add('cabinet-ready');
+    }
   }
 
-  if (document.readyState === 'loading') {
+  // If DOM root elements are already in the document, boot immediately!
+  var rootEl = $('#collection-root') || $('#game-root') || $('#info-root') || $('#featured') || $('#main');
+  if (rootEl) {
+    boot();
+  } else if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
   } else {
     boot();
   }
+
+  // Fallback triggers to guarantee readiness
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  }
+  window.addEventListener('load', function () {
+    boot();
+    if (document.body) document.body.classList.add('cabinet-ready');
+  });
 
   // Fav buttons are delegated so they work on every rendered card
   document.addEventListener('click', function (e) {
