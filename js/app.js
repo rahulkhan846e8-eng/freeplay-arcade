@@ -564,7 +564,7 @@
         'gta-v',
         'counter-strike-16',
         'wwe-smackdown-here-comes-the-pain',
-        'need-for-speed-most-wanted',
+        'tekken-5-dark-resurrection',
         'hollow-knight'
       ];
       var featGames = featSlugs.map(function (slug) { return D.game(slug); }).filter(Boolean);
