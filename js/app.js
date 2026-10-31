@@ -870,7 +870,7 @@
             '</div>' +
             '<div class="play-notice">' +
               '<span class="play-notice-mark" aria-hidden="true">!</span>' +
-              '<p><strong>You are leaving ARCADE.</strong> Play opens <b>' + esc(host) + '</b> in a new tab. The game, its downloads, ads and account prompts are controlled by that site, not by us. Your ARCADE tab stays open right here.</p>' +
+              '<p><strong>Regional Notice:</strong> Some games or mirror servers may not be accessible in your region due to local network restrictions. If a game fails to load, please connect to a <strong>VPN</strong> so you can enjoy all games without interruption.</p>' +
             '</div>' +
           '</div>' +
 
