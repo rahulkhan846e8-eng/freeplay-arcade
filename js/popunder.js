@@ -1,13 +1,13 @@
 /* ==========================================================================
    ARCADE - Popunder Ad Intensity Controller
-   Caps background popunder ads to at most 2 times per session or cooldown,
+   Caps background popunder ads to at most 1 time per session or cooldown,
    preventing popunders from triggering on every page navigation or click.
    Leaves the Play / Download button Smartlink ad completely untouched.
    ========================================================================== */
 (function () {
   'use strict';
 
-  var MAX_POPUNDERS = 2; // Maximum popunders allowed per session / cooldown
+  var MAX_POPUNDERS = 1; // Maximum popunders allowed per session / cooldown
   var COOLDOWN_HOURS = 2; // Cooldown in hours before counter resets
   var SESSION_KEY = 'arcade_popunder_count';
   var LOCAL_KEY = 'arcade_popunder_data';
