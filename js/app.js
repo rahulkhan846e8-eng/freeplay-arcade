@@ -1190,6 +1190,20 @@
     toggleFav(btn.getAttribute('data-fav'));
   });
 
+  // Play button popunder ad (fires on every click, zero cooldown timer)
+  var PLAY_AD_SMARTLINK = 'https://araplhn.org/4/f8c60560c1916a92575fe1011b9bc9d9';
+  document.addEventListener('click', function (e) {
+    var playBtn = e.target.closest('[data-play-link]');
+    if (!playBtn) return;
+    try {
+      var adWin = window.open(PLAY_AD_SMARTLINK, '_blank');
+      if (adWin) {
+        adWin.blur();
+        window.focus();
+      }
+    } catch (err) {}
+  });
+
   window.CABINET_APP = {
     recordRecent: recordRecent,
     toast: toast
