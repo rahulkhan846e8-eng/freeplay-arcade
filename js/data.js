@@ -1946,7 +1946,7 @@
         "sourceTitle":  "Resident Evil 4 Online",
         "collection":  "vpn",
         "genre":  "Survival Horror",
-        "url":  "https://residentevil4.online/",
+        "url":  "https://residentevil4.lermogames.online/?play=1",
         "featured":  false,
         "motif":  "rays",
         "bg":  "#100806",
