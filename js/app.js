@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    ARCADE — site application
    ========================================================================== */
 (function () {
@@ -992,7 +992,7 @@
         '<li><strong>Versus</strong> — wrestling, fighting and party games for two sides and one winner.</li>' +
         '<li><strong>Firefight</strong> — shooters from the tactical to the completely unhinged.</li>' +
         '<li><strong>Speed &amp; Sport</strong> — racing, football, cricket and last-minute comebacks.</li>' +
-        '<li><strong>The Vault</strong> — horror, rhythm, puzzle, RPG and browser curiosities that fit nowhere else.</li>' +
+        '<li><strong>VPN</strong> — classics and fan favorites that may require a VPN depending on your local region.</li>' +
         '</ul>' +
         '<h2>What ARCADE is — and is not</h2>' +
         '<p>ARCADE does not host game files, ROMs, ISOs or emulators, and does not claim ownership of any game. The catalogue links to third-party sites that provide the playable versions. Game names, logos and trademarks belong to their respective owners. ARCADE is independent and is not affiliated with, endorsed by or sponsored by any publisher, platform holder, storefront or external host.</p>' +

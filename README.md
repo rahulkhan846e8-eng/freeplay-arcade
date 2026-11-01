@@ -12,7 +12,7 @@ A neo-brutalist browser arcade indexing 48 games across five curated collections
 2. **Versus** — Wrestling, fighting, and couch chaos.
 3. **Firefight** — Arena shooters, zombie waves, and tactical classics.
 4. **Speed & Sport** — Racing, football, and quick lunch-break arcade sessions.
-5. **The Vault** — Horror, puzzles, rhythm, and browser curiosities.
+5. **VPN** — Retro classics and fan favorites that may require a VPN in certain regions.
 6. **Retro Room (6 Games)** — Instant in-browser canvas classics (GTA 2, GTA III, GTA IV, GTA V, Minecraft, Vice City).
 
 ---
