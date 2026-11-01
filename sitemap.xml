@@ -41,7 +41,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arcade.run.place/collection?c=vault</loc>
+    <loc>https://arcade.run.place/collection?c=vpn</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -804,5 +804,20 @@
     <loc>https://arcade.run.place/dragon-ball-devolution</loc>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://arcade.run.place/tekken-5</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://arcade.run.place/crash-nitro-kart</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://arcade.run.place/wwe-smackdown-vs-raw</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
