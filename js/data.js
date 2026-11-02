@@ -227,7 +227,7 @@
         "collection":  "open",
         "genre":  "Metroidvania",
         "url":  "https://dezm0n.itch.io/hollow-knight-web-port",
-        "featured":  true,
+        "featured":  false,
         "motif":  "speed",
         "bg":  "#1a0c14",
         "accent":  "#ff4fa3",
@@ -2219,6 +2219,20 @@
         "accent":  "#ff4b2b",
         "accent2":  "#d8ff3e",
         "index":  151
+    },
+    {
+        "slug":  "sansad-showdown",
+        "title":  "Sansad Showdown",
+        "sourceTitle":  "Sansad Showdown (Fight Karo)",
+        "collection":  "versus",
+        "genre":  "Satire Fighter",
+        "url":  "https://fightkaro.com/",
+        "featured":  true,
+        "motif":  "versus",
+        "bg":  "#120a06",
+        "accent":  "#ff9933",
+        "accent2":  "#38bdf8",
+        "index":  152
     }
 ];
 

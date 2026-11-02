@@ -1,6 +1,6 @@
 # ARCADE
 
-> Free, independent, neo-brutalist browser arcade indexing 48 games across five curated collections. Zero friction, instant play, no accounts, no installations.
+> Free, independent, neo-brutalist browser arcade indexing 152 games across five curated collections. Zero friction, instant play, no accounts, no installations.
 
 ## Overview
 ARCADE is a web-based game catalogue that indexes playable browser games. Each cabinet card links directly to its external play destination or provides a self-contained canvas mini-game. All favorites and shelves are stored in the user's browser localStorage without requiring a server or database.

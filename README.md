@@ -2,7 +2,7 @@
 
 > **48 browser games across five collections. One click to play.**
 
-A neo-brutalist browser arcade indexing 48 games across five curated collections. Open a cabinet, hit Play, and jump straight into the action. Features procedural typographic SVG poster covers, high score tracking, shelf bookmarking, instant search (<kbd>Ctrl</kbd> + <kbd>K</kbd>), and an integrated 6-in-1 Retro Room.
+A neo-brutalist browser arcade indexing 152 games across five curated collections. Open a cabinet, hit Play, and jump straight into the action. Features procedural typographic SVG poster covers, high score tracking, shelf bookmarking, instant search (<kbd>Ctrl</kbd> + <kbd>K</kbd>), and an integrated 6-in-1 Retro Room.
 
 ---
 
