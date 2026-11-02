@@ -169,6 +169,15 @@
 
   /* ---------- header / nav ---------- */
   function initHeader() {
+    if (D && D.collections) {
+      D.collections.forEach(function (c) {
+        var count = D.countFor(c.id);
+        var navSpan = $('.main-nav [data-nav="' + c.id + '"] span');
+        if (navSpan) navSpan.textContent = count;
+        var mobSpan = $('#mobile-nav a[href="collection?c=' + c.id + '"] span');
+        if (mobSpan) mobSpan.textContent = count;
+      });
+    }
     var menuBtn = $('[data-menu-toggle]');
     var menu = $('#mobile-nav');
     if (menuBtn && menu) {
